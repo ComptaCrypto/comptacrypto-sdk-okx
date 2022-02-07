@@ -1,0 +1,57 @@
+# frozen_string_literal: true
+
+RSpec.describe Comptacrypto::Sdk::Okx::Client do
+  subject(:client) do
+    described_class.new
+  end
+
+  describe "#time", :vcr do
+    let(:payload) do
+      {
+        "iso" => "2022-02-07T13:43:02.354Z",
+        "epoch" => "1644241382.354"
+      }
+    end
+
+    it "returns the server time in milliseconds" do
+      expect(client.time.body).to eq payload
+    end
+  end
+
+  describe "#withdrawal_history", :vcr do
+    # @todo When the authentication will be corrected,
+    #   we will be able to generate a VCR cassette and refresh the payload.
+    let(:payload) do
+      [
+        {
+          "amount" => 0.094,
+          "withdrawal_id" => "4703879",
+          "fee" => "0.01000000eth",
+          "txid" => "0x62477bac6509a04512819bb1455e923a60dea5966c7caeaa0b24eb8fb0432b85",
+          "currency" => "ETH",
+          "chain" => "ETH-TRC20",
+          "from" => "13426335357",
+          "to" => "0xA41446125D0B5b6785f6898c9D67874D763A1519",
+          "timestamp" => "2018-04-22T23:09:45.000Z",
+          "status" => "2"
+        },
+        {
+          "amount" => 0.01,
+          "withdrawal_id" => "4703879",
+          "fee" => "0.00000000btc",
+          "txid" => "",
+          "currency" => "BTC",
+          "chain" => "BTC-TRC20",
+          "from" => "13426335357",
+          "to" => "13426335357",
+          "timestamp" => "2018-05-17T02:43:08.000Z",
+          "status" => "2"
+        }
+      ]
+    end
+
+    xit "returns the withdrawal history" do
+      expect(client.withdrawal_history.body).to eq payload
+    end
+  end
+end

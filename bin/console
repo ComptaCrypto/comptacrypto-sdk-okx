@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+
+# @see https://github.com/bkeepers/dotenv#sinatra-or-plain-ol-ruby
+require "dotenv"
+Dotenv.load(".env.development.local")
+
+require_relative "../lib/comptacrypto/sdk/okx"
+require "irb"
+
+IRB.start(__FILE__)
