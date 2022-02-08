@@ -63,6 +63,45 @@ module Comptacrypto
           private_endpoint(request_path: "/api/account/v3/wallet", ms_iso8601:)
         end
 
+        # @see https://www.okx.com/docs/en/#account-sub-account
+        #
+        # GET /api/account/v3/sub-account
+        #
+        # @param sub_account [String]: sub account name
+        def funding_sub_account(ms_iso8601 = remote_ms_iso8601, sub_account:)
+          private_endpoint(request_path: "/api/account/v3/sub-account", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#account-asset-valuation
+        #
+        # GET /api/account/v3/asset-valuation
+        #
+        # @option [String] account_type: 0.Total account assets, 1.spot, 3.futures, 5.margin, 6.Funding Account, 9.swap,
+        # 12：option, 14.mining account, 15: USDT-margined futures account, 16: USDT-margined perpetual swap account. Query total assets by default
+        # @option [String] valuation_currency: "BTC USD CNY JPY KRW RUB" The default unit is BTC
+        def funding_asset_valuation(ms_iso8601 = remote_ms_iso8601, account_type: nil, valuation_currency: nil)
+          private_endpoint(request_path: "/api/account/v3/asset-valuation", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#account-singleness
+        #
+        # GET /api/account/v3/wallet/<currency>
+        #
+        # @option [String] currency: Token symbol, e.g. 'BTC
+        def funding_currency(ms_iso8601 = remote_ms_iso8601, currency: nil)
+          request_path = "/api/account/v3/wallet/#{currency}"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#account-transfer-state
+        #
+        # GET /api/account/v3/transfer/state
+        #
+        # @param transfer_id [String]
+        def funding_transfer_state(ms_iso8601 = remote_ms_iso8601, transfer_id:)
+          private_endpoint(request_path: "/api/account/v3/transfer/state", ms_iso8601:)
+        end
+
         # @see https://www.okx.com/docs/en/#account-all-withdrawal-history
         #
         # GET /api/account/v3/withdrawal/history
@@ -71,12 +110,80 @@ module Comptacrypto
           private_endpoint(request_path: "/api/account/v3/withdrawal/history", ms_iso8601:)
         end
 
+        # @see https://www.okx.com/docs/en/#account-Single-withdrawal-history
+        #
+        # GET /api/account/v3/transfer/state
+        #
+        # @param currency [String]
+        def withdrawal_history_currency(ms_iso8601 = remote_ms_iso8601, currency:)
+          request_path = "/api/account/v3/withdrawal/history/#{currency}"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#account-query
+        #
+        # GET /api/account/v3/ledger
+        #
+        # @option [String] currency : e.g. 'BTC'
+        # @option [String] type : 1:deposit, 2:withdrawal, 13:cancel withdrawal, 18: into futures account, 19: out of futures account, 20:into sub account,
+        # 21:out of sub account, 28: claim, 29: into ETT account, 30: out of ETT account, 31: into C2C account, 32:out of C2C account, 33: into margin account,
+        # 34: out of margin account, 37: into spot account, 38: out of spot account, 41: Service fees settlement, 42: Loyalty points purchase,
+        # 43: Loyalty points transfer, 44: Cancel transfer of loyalty points, 47: System Reverse, 48: Get from activity, 49: Send by activity,
+        # 50: Subscription allotment, 51: Subscription cost, 52: Send by red packet 53: Receive from red packet, 54: Back from red packet, 55: To: swap account,
+        # 56: From: swap account, 57: To Savings Account, 58: From Savings Account, 59: From Hedging Account, 60: To Hedging Account, 61: exchange
+        # 62:From: Options Account, 63:To: Options Account, 66: From Mining/Staking Account, 67: To Mining/Staking Account,
+        # 68: Pass benefit redemption, 69: Pass benefit delivery, 70:From Loans Account, 71:To Loans Account
+        # @option [String] :after Pagination of data to return records earlier than the requested ledger_id.
+        # @option [String] :before Pagination of data to return records new than the requested ledger_id.
+        # @option [String] :limit Number of results per request. The maximum is 100; the default is 100
+        def funding_bill_detail(ms_iso8601 = remote_ms_iso8601, currency:, type:, after: nil, before: nil, limit: "100")
+          private_endpoint(request_path: "/api/account/v3/ledger", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#account-deposit-address
+        #
+        # GET /api/account/v3/deposit/address
+        #
+        # @param currency [String]
+        def deposit_address(ms_iso8601 = remote_ms_iso8601, currency:)
+          private_endpoint(request_path: "/api/account/v3/deposit/address", ms_iso8601:)
+        end
+
         # @see https://www.okx.com/docs/en/#account-all-deposit-history
         #
         # GET/api/account/v3/deposit/history
         #
         def deposit_history(ms_iso8601 = remote_ms_iso8601)
           private_endpoint(request_path: "/api/account/v3/deposit/history", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#account-single-deposit-history
+        #
+        # GET /api/account/v3/deposit/history/<currency>
+        #
+        # @param currency [String]
+        # @option [String] :after Pagination of data to return records earlier than the requested deposit_id
+        # @option [String] :before Pagination of data to return records newer than the requested deposit_id
+        # @option [String] :limit The maximum is 100; the default is 100
+        def deposit_history_currency(ms_iso8601 = remote_ms_iso8601, currency:, after: nil, before: nil, limit: "100")
+          request_path = "/api/account/v3/deposit/history/#{currency}"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#account-currencies
+        #
+        # GET /api/account/v3/currencies
+        #
+        def get_currency(ms_iso8601 = remote_ms_iso8601)
+          private_endpoint(request_path: "/api/account/v3/currencies", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#account-uid
+        #
+        # GET /api/account/v3/uid
+        #
+        def get_user_id(ms_iso8601 = remote_ms_iso8601)
+          private_endpoint(request_path: "/api/account/v3/uid", ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#swap-swap---hold_information
