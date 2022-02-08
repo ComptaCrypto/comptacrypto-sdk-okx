@@ -26,7 +26,7 @@ RSpec.describe Comptacrypto::Sdk::Okx::Base64EncodedSignature do
 
         context "without querystring params" do
           let(:request_path) do
-            "/orders"
+            URI("/orders")
           end
 
           it "signs the message" do
@@ -36,7 +36,7 @@ RSpec.describe Comptacrypto::Sdk::Okx::Base64EncodedSignature do
 
         context "with querystring params" do
           let(:request_path) do
-            "/orders?before=2&limit=30"
+            URI("/orders?before=2&limit=30")
           end
 
           it "signs the message" do
@@ -62,7 +62,7 @@ RSpec.describe Comptacrypto::Sdk::Okx::Base64EncodedSignature do
 
         context "without querystring params" do
           let(:request_path) do
-            "/orders"
+            URI("/orders")
           end
 
           it "signs the message" do
@@ -72,7 +72,7 @@ RSpec.describe Comptacrypto::Sdk::Okx::Base64EncodedSignature do
 
         context "with querystring params" do
           let(:request_path) do
-            "/orders?before=2&limit=30"
+            URI("/orders?before=2&limit=30")
           end
 
           it "signs the message" do

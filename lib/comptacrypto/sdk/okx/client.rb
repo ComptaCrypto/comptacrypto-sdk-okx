@@ -2,6 +2,7 @@
 
 require "faraday"
 require "time"
+require "uri"
 
 require_relative "base64_encoded_signature"
 
