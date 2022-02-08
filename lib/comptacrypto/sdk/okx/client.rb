@@ -208,6 +208,101 @@ module Comptacrypto
           private_endpoint(request_path:, ms_iso8601:)
         end
 
+        # @see https://www.okx.com/docs/en/#option-option---position
+        #
+        # GET /api/option/v3/<underlying>/position
+        #
+        # @param underlying [String]
+        # @option [String] instrument_id
+        def option_position(ms_iso8601 = remote_ms_iso8601, underlying:, instrument_id: nil)
+          request_path = "/api/option/v3/#{underlying}/position"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#option-option---account_underlying
+        #
+        # GET /api/option/v3/accounts/<underlying>
+        #
+        # @param underlying [String]
+        def option_underlying_account_information(ms_iso8601 = remote_ms_iso8601, underlying:)
+          request_path = "/api/option/v3/accounts/#{underlying}"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#option-option---order_information
+        #
+        # GET /api/option/v3/orders/<underlying>/<order_id OR /api/option/v3/orders/<underlying>/client_oid
+        #
+        # @param underlying [String]
+        # Either client_oid or order_id must be present
+        # @option [String] order_id
+        # @option [String] client_iod
+        def option_order_information(ms_iso8601 = remote_ms_iso8601, underlying:, order_id: nil, client_oid: nil)
+          request_path = if client_oid.nil?
+            "/api/option/v3/orders/#{underlying}/#{order_id}"
+          else
+            "/api/option/v3/orders/#{underlying}/#{client_iod}"
+          end
+
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#option-option---order_list
+        #
+        # GET /api/option/v3/orders/<underlying>
+        #
+        # @param underlying [String]
+        # @param state [String] -2 = Failed, -1 = Canceled, 0 = Open, 1 = Partially Filled, 2 = Fully Filled, 3 = Submitting,
+        # 4 = Canceling, 6 = Incomplete (Open + Partially Filled), 7 = Complete (Canceled + Fully Filled)
+        # @option [String] instrument_id
+        # @option [String] after Pagination of data to return records earlier than the requested order_id
+        # @option [String] before Pagination of data to return records newer than the requested order_id
+        # @option [String] limit The maximum is 100; the default is 100
+        def option_order_list(ms_iso8601 = remote_ms_iso8601, underlying:, state:, instrument_id: nil, after: nil, before: nil, limit: "100")
+          request_path = "/api/option/v3/orders/#{underlying}"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#option-option---fills
+        #
+        # GET /api/option/v3/fills/<underlying>
+        #
+        # @param underlying [String]
+        # @option [String] order_id
+        # @option [String] instrument_id
+        # @option [String] after Pagination of data to return records earlier than the requested trade_id
+        # @option [String] before Pagination of data to return records newer than the requested trade_id
+        # @option [String] limit The maximum is 100; the default is 100
+        def option_fill(ms_iso8601 = remote_ms_iso8601, underlying:, order_id: nil, instrument_id: nil, after: nil, before: nil, limit: "100")
+          request_path = "/api/option/v3/fills/#{underlying}"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#option-option---ledger
+        #
+        # GET /api/option/v3/accounts/<underlying>/ledger
+        #
+        # @param underlying [String]
+        # @option [String] after Pagination of data to return records earlier than the requested ledger_id
+        # @option [String] before Pagination of data to return records newer than the requested ledger_id
+        # @option [String] limit The maximum is 100; the default is 100
+        def option_position(ms_iso8601 = remote_ms_iso8601, underlying:, after: nil, before: nil, limit: "100")
+          request_path = "/api/option/v3/accounts/#{underlying}/ledger"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#option-option---trade_fee
+        #
+        # GET /api/option/v3/trade_fee
+        #
+        # Choose and enter one parameter between category and underlying
+        # @option [String] category
+        # @option [String] underlying
+        def option_position(ms_iso8601 = remote_ms_iso8601, category: nil, underlying: nil)
+          raise ::ArgumentError if category.nil? && underlying.nil?
+          private_endpoint(request_path: "/api/option/v3/trade_fee", ms_iso8601:)
+        end
+
         private
 
         def public_endpoint(request_path:)
