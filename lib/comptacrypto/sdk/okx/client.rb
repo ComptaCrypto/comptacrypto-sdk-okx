@@ -186,6 +186,15 @@ module Comptacrypto
           private_endpoint(request_path: "/api/account/v3/uid", ms_iso8601:)
         end
 
+        # @see https://www.okx.com/docs/en/#account-charge
+        #
+        # GET /api/account/v3/withdrawal/fee
+        #
+        # @option [String] :currency : e.g. 'BTC'
+        def get_user_id(ms_iso8601 = remote_ms_iso8601, currency: nil)
+          private_endpoint(request_path: "/api/account/v3/withdrawal/fee", ms_iso8601:)
+        end
+
         # @see https://www.okx.com/docs/en/#swap-swap---hold_information
         #
         # GET/api/swap/v3/position
@@ -254,6 +263,7 @@ module Comptacrypto
         # @option [String] client_iod
         def swap_order_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, client_iod: nil, order_id: nil)
           raise ::ArgumentError if client_iod.nil? && order_id.nil?
+
           request_path = if client_iod.nil?
             "/api/swap/v3/orders/#{instrument_id}/#{order_id}"
           else
@@ -293,6 +303,7 @@ module Comptacrypto
         # @option [String] :instrument_id contract ID，eg：BTC-USD-SWAP
         def swap_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, instrument_id: nil)
           raise ::ArgumentError if category.nil? && instrument_id.nil?
+
           private_endpoint(request_path: "/api/swap/v3/trade_fee", ms_iso8601:)
         end
 
@@ -311,6 +322,7 @@ module Comptacrypto
         # @option [String] :limit The number of results returned by the page. Default and maximum are both 100
         def swap_algo_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_type:, status: nil, algo_id: nil, before: nil, after: nil, limit: '100')
           raise ::ArgumentError if status.nil? && algo_id.nil?
+
           request_path = "/api/swap/v3/order_algo/#{instrument_id}"
           private_endpoint(request_path:, ms_iso8601:)
         end
@@ -407,6 +419,7 @@ module Comptacrypto
         # @option [String] underlying
         def option_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, underlying: nil)
           raise ::ArgumentError if category.nil? && underlying.nil?
+
           private_endpoint(request_path: "/api/option/v3/trade_fee", ms_iso8601:)
         end
 
@@ -481,6 +494,7 @@ module Comptacrypto
         # @option [String] underlying
         def future_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, underlying: nil)
           raise ::ArgumentError if category.nil? && underlying.nil?
+
           private_endpoint(request_path: "/api/futures/v3/trade_fee", ms_iso8601:)
         end
 
