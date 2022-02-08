@@ -308,7 +308,7 @@ module Comptacrypto
         # GET /api/futures/v3/position
         #
         def future_position(ms_iso8601 = remote_ms_iso8601)
-          private_endpoint(request_path: "api/futures/v3/position", ms_iso8601:)
+          private_endpoint(request_path: "/api/futures/v3/position", ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#futures-singleness
@@ -385,6 +385,118 @@ module Comptacrypto
         def future_hold_amount(ms_iso8601 = remote_ms_iso8601, instrument_id:)
           request_path = "/api/futures/v3/accounts/#{instrument_id}/holds"
           private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot_leverage-account_information
+        #
+        # GET /api/margin/v3/accounts
+        #
+        def margin_account(ms_iso8601 = remote_ms_iso8601)
+          private_endpoint(request_path: "/api/margin/v3/accounts", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot_leverage-singleness
+        #
+        # GET /api/margin/v3/accounts/<instrument_id>
+        #
+        # @param instrument_id [String]
+        def margin_account_currency(ms_iso8601 = remote_ms_iso8601, instrument_id:)
+          request_path = "/api/margin/v3/accounts/#{instrument_id}"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot_leverage-query
+        #
+        # GET /api/margin/v3/accounts/<instrument_id>/ledger
+        #
+        # @param instrument_id [String]
+        # @option [String] after Pagination of data to return records earlier than the requested ledger_id
+        # @option [String] before Pagination of data to return records newer than the requested ledger_id
+        # @option [String] limit The maximum is 100; the default is 100
+        # @option [String] type 3.Tokens Borrowed, 4.Tokers Repaid, 5.Interest Accrued, 7.Buy, 8.Sell, 9.From Funding, 10.From C2C,
+        # 12.From Spot, 14.To Funding, 15.To C2C, 16.To Spot, 19.Auto Interest Payment, 24.Liquidation Fees, 59.Repay Candy, 61.To Margin, 62.From Margin
+        def margin_bill_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, after: nil, before: nil, limit: "100", type: nil)
+          request_path = "/api/margin/v3/accounts/#{instrument_id}/ledger"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot_leverage-record
+        #
+        # GET /api/margin/v3/accounts/borrowed
+        #
+        # @param status [String] 0: outstanding, 1: repaid. Default: 0
+        # @option [String] after Pagination of data to return records earlier than the requested borrow_id
+        # @option [String] before Pagination of data to return records newer than the requested borrow_id
+        # @option [String] limit The maximum is 100; the default is 100
+        def margin_loan_history(ms_iso8601 = remote_ms_iso8601, status:, after: nil, before: nil, limit: "100")
+          private_endpoint(request_path: "/api/margin/v3/accounts/borrowed", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot_leverage-list
+        #
+        # GET /api/margin/v3/orders
+        #
+        # @param instrument_id [String]
+        # @param after [String] Pagination of data to return records earlier than the requested order_id
+        # @param before [String] Pagination of data to return records newer than the requested order_id
+        # @param limit [String] The maximum is 100; the default is 100
+        # @param state [String] -2 = Failed, -1 = Canceled, 0 = Open, 1 = Partially Filled, 2 = Fully Filled,
+        # 3 = Submitting, 4 = Canceling, 6 = Incomplete (open + partially filled), 7 = Complete (canceled + fully filled)
+        def margin_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, after:, before:, limit: "100", state:)
+          private_endpoint(request_path: "/api/margin/v3/orders", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot_leverage-get_leverage
+        #
+        # GET /api/margin/v3/accounts/<instrument_id>/leverage
+        #
+        # @param instrument_id [String]
+        def margin_leverage(ms_iso8601 = remote_ms_iso8601, instrument_id:)
+          request_path = "api/margin/v3/accounts/#{instrument_id}/leverage"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot_leverage-order_information
+        #
+        # GET /api/margin/v3/orders/<order_id> OR /api/margin/v3/orders/<client_oid>
+        #
+        # @param instrument_id [String]
+        # Either client_oid or order_id must be present
+        # @option [String] order_id
+        # @option [String] client_iod
+        def margin_order_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, client_oid: nil)
+          request_path = if client_oid.nil?
+            "/api/futures/v3/orders/#{order_id}"
+          else
+            "/api/futures/v3/orders/#{client_iod}"
+          end
+
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot_leverage-orders_pending
+        #
+        # GET /api/margin/v3/orders_pending
+        #
+        # @param instrument_id [String]
+        # @param after [String] Pagination of data to return records earlier than the requested order_id
+        # @param before [String] Pagination of data to return records newer than the requested order_id
+        # @param limit [String] The maximum is 100; the default is 100
+        def margin_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, after:, before:, limit: "100")
+          private_endpoint(request_path: "/api/margin/v3/orders_pending", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot_leverage-detail
+        #
+        # GET /api/margin/v3/fills
+        #
+        # @param instrument_id [String]
+        # @option order_id
+        # @option [String] after Pagination of data to return records earlier than the requested order_id
+        # @option [String] before Pagination of data to return records newer than the requested order_id
+        # @option [String] limit The maximum is 100; the default is 100
+        def margin_transaction_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, after:, before:, limit: "100")
+          private_endpoint(request_path: "/api/margin/v3/fills", ms_iso8601:)
         end
 
         private
