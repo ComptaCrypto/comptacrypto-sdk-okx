@@ -34,35 +34,35 @@ client = Comptacrypto::Sdk::Okx::Client.new(
 )
 
 # Send a request to query server time
-client.time
-# =>  {"iso": "2022-02-07T10:32:02.071Z", "epoch": "1644229922.071"}
+client.time # => #<Faraday::Response:0x00007f74e3a758f0>
+client.time.body # => {"iso"=>"2022-02-07T21:40:25.791Z", "epoch"=>"1644270025.791"}
 
 # Send a request to query withdrawal history
-client.withdrawal_history
+client.withdrawal_history.body
 # =>  [
 #       {
-#         "amount": 0.094,
-#         "withdrawal_id": "4703879",
-#         "fee": "0.01000000eth",
-#         "txid": "0x62477bac6509a04512819bb1455e923a60dea5966c7caeaa0b24eb8fb0432b85",
-#         "currency": "ETH",
-#         "chain": "ETH-TRC20",
-#         "from": "13426335357",
-#         "to": "0xA41446125D0B5b6785f6898c9D67874D763A1519",
-#         "timestamp": "2018-04-22T23:09:45.000Z",
-#         "status": "2"
+#         "amount" => 0.094,
+#         "withdrawal_id" => "4703879",
+#         "fee" => "0.01000000eth",
+#         "txid" => "0x62477bac6509a04512819bb1455e923a60dea5966c7caeaa0b24eb8fb0432b85",
+#         "currency" => "ETH",
+#         "chain" => "ETH-TRC20",
+#         "from" => "13426335357",
+#         "to" => "0xA41446125D0B5b6785f6898c9D67874D763A1519",
+#         "timestamp" => "2018-04-22T23:09:45.000Z",
+#         "status" => "2"
 #       },
 #       {
-#         "amount": 0.01,
-#         "withdrawal_id": "4703879",
-#         "fee": "0.00000000btc",
-#         "txid": "",
-#         "currency": "BTC",
-#         "chain": "BTC-TRC20",
-#         "from": "13426335357",
-#         "to": "13426335357",
-#         "timestamp": "2018-05-17T02:43:08.000Z",
-#         "status": "2"
+#         "amount" => 0.01,
+#         "withdrawal_id" => "4703879",
+#         "fee" => "0.00000000btc",
+#         "txid" => "",
+#         "currency" => "BTC",
+#         "chain" => "BTC-TRC20",
+#         "from" => "13426335357",
+#         "to" => "13426335357",
+#         "timestamp" => "2018-05-17T02:43:08.000Z",
+#         "status" => "2"
 #       }
 #     ]
 ```

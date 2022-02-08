@@ -8,8 +8,8 @@ RSpec.describe Comptacrypto::Sdk::Okx::Client do
   describe "#time", :vcr do
     let(:payload) do
       {
-        "iso" => "2022-02-07T13:43:02.354Z",
-        "epoch" => "1644241382.354"
+        "iso" => "2022-02-08T07:57:58.088Z",
+        "epoch" => "1644307078.088"
       }
     end
 
@@ -52,6 +52,24 @@ RSpec.describe Comptacrypto::Sdk::Okx::Client do
 
     xit "returns the withdrawal history" do
       expect(client.withdrawal_history.body).to eq payload
+    end
+  end
+
+  describe "#sign" do
+    before do
+      allow(client).to receive(:secret_key).and_return("secret")
+    end
+
+    let(:request_path) do
+      "/foo/bar"
+    end
+
+    let(:ms_iso8601) do
+      "2022-02-07T21:37:33.383Z"
+    end
+
+    it "signs the message" do
+      expect(client.send(:sign, request_path:, ms_iso8601:)).to eq "XP6HICMaSSlQ4jC6a5e0m+NnTg3kmhrB9KvkcTZUhy0="
     end
   end
 end
