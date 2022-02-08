@@ -231,7 +231,7 @@ module Comptacrypto
 
         # @see https://www.okx.com/docs/en/#option-option---order_information
         #
-        # GET /api/option/v3/orders/<underlying>/<order_id OR /api/option/v3/orders/<underlying>/client_oid
+        # GET /api/option/v3/orders/<underlying>/<order_id> OR /api/option/v3/orders/<underlying>/client_oid>
         #
         # @param underlying [String]
         # Either client_oid or order_id must be present
@@ -286,7 +286,7 @@ module Comptacrypto
         # @option [String] after Pagination of data to return records earlier than the requested ledger_id
         # @option [String] before Pagination of data to return records newer than the requested ledger_id
         # @option [String] limit The maximum is 100; the default is 100
-        def option_position(ms_iso8601 = remote_ms_iso8601, underlying:, after: nil, before: nil, limit: "100")
+        def option_bill_detail(ms_iso8601 = remote_ms_iso8601, underlying:, after: nil, before: nil, limit: "100")
           request_path = "/api/option/v3/accounts/#{underlying}/ledger"
           private_endpoint(request_path:, ms_iso8601:)
         end
@@ -298,9 +298,93 @@ module Comptacrypto
         # Choose and enter one parameter between category and underlying
         # @option [String] category
         # @option [String] underlying
-        def option_position(ms_iso8601 = remote_ms_iso8601, category: nil, underlying: nil)
+        def option_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, underlying: nil)
           raise ::ArgumentError if category.nil? && underlying.nil?
           private_endpoint(request_path: "/api/option/v3/trade_fee", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#futures-hold_information
+        #
+        # GET /api/futures/v3/position
+        #
+        def future_position(ms_iso8601 = remote_ms_iso8601)
+          private_endpoint(request_path: "api/futures/v3/position", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#futures-singleness
+        #
+        # GET /api/futures/v3/accounts
+        #
+        def future_account(ms_iso8601 = remote_ms_iso8601)
+          private_endpoint(request_path: "/api/futures/v3/accounts", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#futures-list
+        #
+        # GET /api/futures/v3/orders/<instrument_id>
+        #
+        # @param instrument_id [String]
+        # @param state [String] -2 = Failed, -1 = Canceled, 0 = Open, 1 = Partially Filled, 2 = Fully Filled, 3 = Submitting,
+        # 4 = Canceling, 6 = Incomplete (open + partially filled), 7 = Complete (canceled + fully filled)
+        # @option [String] after Pagination of data to return records earlier than the requested order_id
+        # @option [String] before Pagination of data to return records new than the requested order_id
+        # @option [String] limit The maximum is 100; the default is 100
+        def future_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, state:, after: nil, before: nil, limit: "100")
+          request_path = "/api/futures/v3/orders/#{instrument_id}"
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#futures-order_information
+        #
+        # GET /api/futures/v3/orders/<instrument_id>/<order_id> OR /api/futures/v3/orders/<instrument_id>/<client_oid>
+        #
+        # @param instrument_id [String]
+        # Either client_oid or order_id must be present
+        # @option [String] order_id
+        # @option [String] client_iod
+        def future_order_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, client_oid: nil)
+          request_path = if client_oid.nil?
+            "/api/futures/v3/orders/#{instrument_id}/#{order_id}"
+          else
+            "/api/futures/v3/orders/#{instrument_id}/#{client_iod}"
+          end
+
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#futures-futuresdetail
+        #
+        # GET /api/futures/v3/fills
+        #
+        # @param instrument_id [String]
+        # @param order_id [String]
+        # @option [String] after Pagination of data to return records earlier than the requested trade_id
+        # @option [String] before Pagination of data to return records new than the requested trade_id
+        # @option [String] limit The maximum is 100; the default is 100
+        def future_transaction_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id:, after: nil, before: nil, limit: "100")
+          private_endpoint(request_path: "/api/futures/v3/fills", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#futures-trade_fee
+        #
+        # GET /api/futures/v3/trade_fee
+        #
+        # Choose and enter one parameter between category and underlying
+        # @option [String] category
+        # @option [String] underlying
+        def future_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, underlying: nil)
+          raise ::ArgumentError if category.nil? && underlying.nil?
+          private_endpoint(request_path: "/api/futures/v3/trade_fee", ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#futures-hold_amount
+        #
+        # GET /api/futures/v3/accounts/<instrument_id>/holds
+        #
+        # @param instrument_id [String]
+        def future_hold_amount(ms_iso8601 = remote_ms_iso8601, instrument_id:)
+          request_path = "/api/futures/v3/accounts/#{instrument_id}/holds"
+          private_endpoint(request_path:, ms_iso8601:)
         end
 
         private
