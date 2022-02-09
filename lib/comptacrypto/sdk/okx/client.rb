@@ -37,18 +37,18 @@ module Comptacrypto
 
         # @see https://www.okx.com/docs/en/#spot-account_information
         #
-        # GET/api/spot/v3/accounts
+        # GET /api/spot/v3/accounts
         #
         def spot_account_information(ms_iso8601 = remote_ms_iso8601)
           private_endpoint(request_path: "/api/spot/v3/accounts", ms_iso8601:)
         end
 
-        # @ see https://www.okx.com/docs/en/#spot-singleness
+        # @see https://www.okx.com/docs/en/#spot-singleness
         #
         # GET /api/spot/v3/accounts/<currency>
         #
         # @param :currency [String] Token symbol, e.g. 'BTC'
-        def spot_currency(ms_iso8601 = remote_ms_iso8601, currency: nil)
+        def spot_currency(ms_iso8601 = remote_ms_iso8601, currency:)
           request_path = "/api/spot/v3/accounts/#{currency}"
 
           private_endpoint(request_path:, ms_iso8601:)
@@ -58,7 +58,7 @@ module Comptacrypto
         #
         # GET /api/spot/v3/accounts/<currency>/ledger
         #
-        # @param :currency [String] : e.g. 'BTC'
+        # @param currency [String] : e.g. 'BTC'
         # @option [String] :type 1.Deposit 2.Withdraw 7.Buy 8.Sell 18.From futures 19.To futures 20.To Sub-account,
         # 21.From Sub-account 22.Transaction Fee Rebate 25.OTC purchase 26.OTC Sell 29.To funding 30.From funding 31.To C2C,
         # 32.From C2C 33.To Margin 34.From Margin 35.Tokens Borrowed 36.Token Repaid 37.Market Maker Reward 39.Transfer-in Fee
@@ -121,6 +121,7 @@ module Comptacrypto
         # @option [String] client_iod
         def spot_order_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, client_iod: nil, order_id: nil)
           raise ::ArgumentError if client_iod.nil? && order_id.nil?
+          raise ::ArgumentError if !client_iod.nil? && !order_id.nil?
 
           request_path = if client_iod.nil?
                            URI("/api/spot/v3/orders/#{order_id}")
@@ -142,7 +143,7 @@ module Comptacrypto
         # @option [String] :category Fee Schedule Tier: 1：Tier 1; 2：Tier 2;4：Tier 4
         # @option [String] :instrument_id contract ID，eg：BTC-USD-SWAP
         def spot_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, instrument_id: nil)
-          raise ::ArgumentError if category.nil? && instrument_id.nil?
+          raise ::ArgumentError if !category.nil? && !instrument_id.nil?
 
           request_path = URI("/api/spot/v3/trade_fee")
           params = { instrument_id:, category: }.compact
@@ -203,7 +204,7 @@ module Comptacrypto
         # @param sub_account [String]: sub account name
         def funding_sub_account(ms_iso8601 = remote_ms_iso8601, sub_account:)
           request_path = URI("/api/account/v3/sub-account")
-          params = { sub_account: }.compact
+          params = { "sub-account": sub_account }.compact
           request_path.query = URI.encode_www_form(params)
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
@@ -240,7 +241,7 @@ module Comptacrypto
         # GET /api/account/v3/transfer/state
         #
         # @param transfer_id [String]
-        def funding_transfer_state(ms_iso8601 = remote_ms_iso8601)
+        def funding_transfer_state(ms_iso8601 = remote_ms_iso8601, transfer_id:)
           request_path = URI("/api/account/v3/transfer/state")
           params = { transfer_id: }.compact
           request_path.query = URI.encode_www_form(params)
@@ -258,7 +259,7 @@ module Comptacrypto
 
         # @see https://www.okx.com/docs/en/#account-Single-withdrawal-history
         #
-        # GET /api/account/v3/transfer/state
+        # GET /api/account/v3/withdrawal/history/<currency>
         #
         # @param currency [String]
         def withdrawal_history_currency(ms_iso8601 = remote_ms_iso8601, currency:)
@@ -395,9 +396,9 @@ module Comptacrypto
         # 7:Settled UPL, 8:Clawback, 9:Insurance Fund, 10:Full Liquidation of Long, 11:Full Liquidation of Short,
         # 14: Funding Fee, 15: Manually Add Margin, 16: Manually Reduce Margin, 17: Auto-Margin, 18: Switch Margin Mode,
         # 19: Partial Liquidation of Long, 20 Partial Liquidation of Short, 21 Margin Added with Lowered Leverage, 22: Settled RPL
-        def swap_bill_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, state: nil, after: nil, before: nil, limit: "100")
+        def swap_bill_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, type: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/swap/v3/accounts/#{instrument_id}/ledger")
-          params = { state:, after:, before:, limit: }.compact
+          params = { type:, after:, before:, limit: }.compact
           request_path.query = URI.encode_www_form(params)
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
@@ -431,6 +432,7 @@ module Comptacrypto
         # @option [String] client_iod
         def swap_order_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, client_iod: nil, order_id: nil)
           raise ::ArgumentError if client_iod.nil? && order_id.nil?
+          raise ::ArgumentError if !client_iod.nil? && !order_id.nil?
 
           request_path = if client_iod.nil?
                            "/api/swap/v3/orders/#{instrument_id}/#{order_id}"
@@ -540,6 +542,7 @@ module Comptacrypto
         # @option [String] client_iod
         def option_order_information(ms_iso8601 = remote_ms_iso8601, underlying:, order_id: nil, client_oid: nil)
           raise ::ArgumentError if client_iod.nil? && order_id.nil?
+          raise ::ArgumentError if !client_iod.nil? && !order_id.nil?
 
           request_path = if client_oid.nil?
                            "/api/option/v3/orders/#{underlying}/#{order_id}"
@@ -611,7 +614,7 @@ module Comptacrypto
         # @option [String] category
         # @option [String] underlying
         def option_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, underlying: nil)
-          raise ::ArgumentError if category.nil? && underlying.nil?
+          raise ::ArgumentError if !category.nil? && !underlying.nil?
 
           request_path = URI("/api/option/v3/trade_fee")
           params = { category:, underlying: }.compact
@@ -664,6 +667,7 @@ module Comptacrypto
         # @option [String] client_iod
         def future_order_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, client_oid: nil)
           raise ::ArgumentError if client_iod.nil? && order_id.nil?
+          raise ::ArgumentError if !client_iod.nil? && !order_id.nil?
 
           request_path = if client_oid.nil?
                            "/api/futures/v3/orders/#{instrument_id}/#{order_id}"
@@ -699,7 +703,7 @@ module Comptacrypto
         # @option [String] category
         # @option [String] underlying
         def future_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, underlying: nil)
-          raise ::ArgumentError if category.nil? && underlying.nil?
+          raise ::ArgumentError if !category.nil? && !underlying.nil?
 
           request_path = URI("/api/futures/v3/trade_fee")
           params = { category:, underlying: }.compact
@@ -807,6 +811,9 @@ module Comptacrypto
         # @option [String] order_id
         # @option [String] client_iod
         def margin_order_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, client_oid: nil)
+          raise ::ArgumentError, "Either client_oid or order_id must be present" if order_id.nil? && client_oid.nil?
+          raise ::ArgumentError, "The client_oid and order_id are present" if !order_id.nil? && !client_oid.nil?
+
           request_path = if client_oid.nil?
                            URI("/api/futures/v3/orders/#{order_id}")
                          else
