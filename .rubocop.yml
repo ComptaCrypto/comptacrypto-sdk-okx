@@ -40,6 +40,9 @@ RSpec/MessageSpies:
 RSpec/SubjectStub:
   Enabled: false
 
+RSpec/NestedGroups:
+  Enabled: false
+
 Gemspec/RequiredRubyVersion:
   Enabled: false
 
