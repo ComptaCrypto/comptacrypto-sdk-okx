@@ -111,7 +111,7 @@ module Comptacrypto
         # GET /api/account/v3/transfer/state
         #
         # @param transfer_id [String]
-        def funding_transfer_state(ms_iso8601 = remote_ms_iso8601, :)
+        def funding_transfer_state(ms_iso8601 = remote_ms_iso8601)
           request_path = URI("/api/account/v3/transfer/state")
           params = {transfer_id:}.compact
           request_path.query = URI.encode_www_form(params)
