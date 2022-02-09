@@ -52,8 +52,12 @@ module Comptacrypto
         # @option [String] :after Pagination of data to return records earlier than the requested ledger_id
         # @option [String] :before Pagination of data to return records newer than the requested ledger_id
         # @option [String] :limit The maximum is 100; the default is 100
-        def spot_transaction_detail(ms_iso8601 = remote_ms_iso8601, order_id: nil, instrument_id: nil, after: nil, before: nil, limit: nil)
-          private_endpoint(request_path: "/api/spot/v3/fills", ms_iso8601:)
+        def spot_transaction_detail(ms_iso8601 = remote_ms_iso8601, order_id: nil, instrument_id: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/spot/v3/fills")
+          params = {order_id:, instrument_id:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#account-information
@@ -69,7 +73,11 @@ module Comptacrypto
         #
         # @param sub_account [String]: sub account name
         def funding_sub_account(ms_iso8601 = remote_ms_iso8601, sub_account:)
-          private_endpoint(request_path: "/api/account/v3/sub-account", ms_iso8601:)
+          request_path = URI("/api/account/v3/sub-account")
+          params = {sub_account:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#account-asset-valuation
@@ -80,7 +88,11 @@ module Comptacrypto
         # 12：option, 14.mining account, 15: USDT-margined futures account, 16: USDT-margined perpetual swap account. Query total assets by default
         # @option [String] valuation_currency: "BTC USD CNY JPY KRW RUB" The default unit is BTC
         def funding_asset_valuation(ms_iso8601 = remote_ms_iso8601, account_type: nil, valuation_currency: nil)
-          private_endpoint(request_path: "/api/account/v3/asset-valuation", ms_iso8601:)
+          request_path = URI("/api/account/v3/asset-valuation")
+          params = {account_type:, valuation_currency:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#account-singleness
@@ -90,6 +102,7 @@ module Comptacrypto
         # @option [String] currency: Token symbol, e.g. 'BTC
         def funding_currency(ms_iso8601 = remote_ms_iso8601, currency: nil)
           request_path = "/api/account/v3/wallet/#{currency}"
+
           private_endpoint(request_path:, ms_iso8601:)
         end
 
@@ -98,8 +111,12 @@ module Comptacrypto
         # GET /api/account/v3/transfer/state
         #
         # @param transfer_id [String]
-        def funding_transfer_state(ms_iso8601 = remote_ms_iso8601, transfer_id:)
-          private_endpoint(request_path: "/api/account/v3/transfer/state", ms_iso8601:)
+        def funding_transfer_state(ms_iso8601 = remote_ms_iso8601, :)
+          request_path = URI("/api/account/v3/transfer/state")
+          params = {transfer_id:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#account-all-withdrawal-history
@@ -137,7 +154,11 @@ module Comptacrypto
         # @option [String] :before Pagination of data to return records new than the requested ledger_id.
         # @option [String] :limit Number of results per request. The maximum is 100; the default is 100
         def funding_bill_detail(ms_iso8601 = remote_ms_iso8601, currency:, type:, after: nil, before: nil, limit: "100")
-          private_endpoint(request_path: "/api/account/v3/ledger", ms_iso8601:)
+          request_path = URI("/api/account/v3/ledger")
+          params = {currency:, type:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#account-deposit-address
@@ -146,7 +167,11 @@ module Comptacrypto
         #
         # @param currency [String]
         def deposit_address(ms_iso8601 = remote_ms_iso8601, currency:)
-          private_endpoint(request_path: "/api/account/v3/deposit/address", ms_iso8601:)
+          request_path = URI("/api/account/v3/deposit/address")
+          params = {currency:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#account-all-deposit-history
@@ -166,8 +191,11 @@ module Comptacrypto
         # @option [String] :before Pagination of data to return records newer than the requested deposit_id
         # @option [String] :limit The maximum is 100; the default is 100
         def deposit_history_currency(ms_iso8601 = remote_ms_iso8601, currency:, after: nil, before: nil, limit: "100")
-          request_path = "/api/account/v3/deposit/history/#{currency}"
-          private_endpoint(request_path:, ms_iso8601:)
+          request_path = URI("/api/account/v3/deposit/history/#{currency}")
+          params = {after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#account-currencies
@@ -192,7 +220,11 @@ module Comptacrypto
         #
         # @option [String] :currency : e.g. 'BTC'
         def get_user_id(ms_iso8601 = remote_ms_iso8601, currency: nil)
-          private_endpoint(request_path: "/api/account/v3/withdrawal/fee", ms_iso8601:)
+          request_path = URI("/api/account/v3/withdrawal/fee")
+          params = {currency:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#swap-swap---hold_information
@@ -210,6 +242,7 @@ module Comptacrypto
         # @param instrument_id [String]
         def swap_position_contract(ms_iso8601 = remote_ms_iso8601, instrument_id:)
           request_path = "/api/swap/v3/#{instrument_id}/position"
+
           private_endpoint(request_path:, ms_iso8601:)
         end
 
@@ -233,9 +266,12 @@ module Comptacrypto
         # 7:Settled UPL, 8:Clawback, 9:Insurance Fund, 10:Full Liquidation of Long, 11:Full Liquidation of Short,
         # 14: Funding Fee, 15: Manually Add Margin, 16: Manually Reduce Margin, 17: Auto-Margin, 18: Switch Margin Mode,
         # 19: Partial Liquidation of Long, 20 Partial Liquidation of Short, 21 Margin Added with Lowered Leverage, 22: Settled RPL
-        def swap_bill_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, after: nil, before: nil, limit: "100", state: nil)
-          request_path = "/api/swap/v3/accounts/#{instrument_id}/ledger"
-          private_endpoint(request_path:, ms_iso8601:)
+        def swap_bill_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, state: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/swap/v3/accounts/#{instrument_id}/ledger")
+          params = {state:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#swap-swap---list
@@ -249,8 +285,11 @@ module Comptacrypto
         # @option [String] :before Pagination of data to return records new than the requested order_id.
         # @option [String] :limit Number of results per request. The maximum is 100; the default is 100
         def swap_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, state:, after: nil, before: nil, limit: "100")
-          request_path = "/api/swap/v3/orders/#{instrument_id}"
-          private_endpoint(request_path:, ms_iso8601:)
+          request_path = URI("/api/swap/v3/orders/#{instrument_id}")
+          params = {state:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#swap-swap---order_information
@@ -282,8 +321,12 @@ module Comptacrypto
         # @option [String] :after Pagination of data to return records earlier than the requested trade_id.
         # @option [String] :before Pagination of data to return records newer than the requested trade_id.
         # @option [String] :limit Number of results per request. The maximum is 100; the default is 100
-        def swap_transaction_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, after:nil, before: nil, limit: "100")
-          private_endpoint(request_path: "/api/swap/v3/fills", ms_iso8601:)
+        def swap_transaction_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/swap/v3/fills")
+          params = {instrument_id:, order_id:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#swap-swap---hold_amount
@@ -294,7 +337,7 @@ module Comptacrypto
           private_endpoint(request_path:, ms_iso8601:)
         end
 
-        # @see https://www.okx.com/docs/en/ #swap-swap---trade_fee
+        # @see https://www.okx.com/docs/en/#swap-swap---trade_fee
         #
         #  GET /api/swap/v3/trade_fee
         #
@@ -304,7 +347,11 @@ module Comptacrypto
         def swap_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, instrument_id: nil)
           raise ::ArgumentError if category.nil? && instrument_id.nil?
 
-          private_endpoint(request_path: "/api/swap/v3/trade_fee", ms_iso8601:)
+          request_path = URI("/api/swap/v3/trade_fee")
+          params = {instrument_id:, category:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#swap-swap---algo_list
@@ -323,8 +370,11 @@ module Comptacrypto
         def swap_algo_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_type:, status: nil, algo_id: nil, before: nil, after: nil, limit: '100')
           raise ::ArgumentError if status.nil? && algo_id.nil?
 
-          request_path = "/api/swap/v3/order_algo/#{instrument_id}"
-          private_endpoint(request_path:, ms_iso8601:)
+          request_path = URI("/api/swap/v3/order_algo/#{instrument_id}")
+          params = {order_type:, status:, algo_id:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#option-option---position
@@ -334,8 +384,11 @@ module Comptacrypto
         # @param underlying [String]
         # @option [String] instrument_id
         def option_position(ms_iso8601 = remote_ms_iso8601, underlying:, instrument_id: nil)
-          request_path = "/api/option/v3/#{underlying}/position"
-          private_endpoint(request_path:, ms_iso8601:)
+          request_path = URI("/api/option/v3/#{underlying}/position")
+          params = {instrument_id:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#option-option---account_underlying
@@ -357,6 +410,8 @@ module Comptacrypto
         # @option [String] order_id
         # @option [String] client_iod
         def option_order_information(ms_iso8601 = remote_ms_iso8601, underlying:, order_id: nil, client_oid: nil)
+          raise ::ArgumentError if client_iod.nil? && order_id.nil?
+
           request_path = if client_oid.nil?
             "/api/option/v3/orders/#{underlying}/#{order_id}"
           else
@@ -378,8 +433,11 @@ module Comptacrypto
         # @option [String] before Pagination of data to return records newer than the requested order_id
         # @option [String] limit The maximum is 100; the default is 100
         def option_order_list(ms_iso8601 = remote_ms_iso8601, underlying:, state:, instrument_id: nil, after: nil, before: nil, limit: "100")
-          request_path = "/api/option/v3/orders/#{underlying}"
-          private_endpoint(request_path:, ms_iso8601:)
+          request_path = URI("/api/option/v3/orders/#{underlying}")
+          params = {state:, instrument_id:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#option-option---fills
@@ -393,8 +451,11 @@ module Comptacrypto
         # @option [String] before Pagination of data to return records newer than the requested trade_id
         # @option [String] limit The maximum is 100; the default is 100
         def option_fill(ms_iso8601 = remote_ms_iso8601, underlying:, order_id: nil, instrument_id: nil, after: nil, before: nil, limit: "100")
-          request_path = "/api/option/v3/fills/#{underlying}"
-          private_endpoint(request_path:, ms_iso8601:)
+          request_path = URI("/api/option/v3/fills/#{underlying}")
+          params = {order_id:, instrument_id:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#option-option---ledger
@@ -406,8 +467,11 @@ module Comptacrypto
         # @option [String] before Pagination of data to return records newer than the requested ledger_id
         # @option [String] limit The maximum is 100; the default is 100
         def option_bill_detail(ms_iso8601 = remote_ms_iso8601, underlying:, after: nil, before: nil, limit: "100")
-          request_path = "/api/option/v3/accounts/#{underlying}/ledger"
-          private_endpoint(request_path:, ms_iso8601:)
+          request_path = URI("/api/option/v3/accounts/#{underlying}/ledger")
+          params = {after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#option-option---trade_fee
@@ -420,7 +484,11 @@ module Comptacrypto
         def option_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, underlying: nil)
           raise ::ArgumentError if category.nil? && underlying.nil?
 
-          private_endpoint(request_path: "/api/option/v3/trade_fee", ms_iso8601:)
+          request_path = URI("/api/option/v3/trade_fee")
+          params = {category:, underlying:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#futures-hold_information
@@ -450,8 +518,11 @@ module Comptacrypto
         # @option [String] before Pagination of data to return records new than the requested order_id
         # @option [String] limit The maximum is 100; the default is 100
         def future_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, state:, after: nil, before: nil, limit: "100")
-          request_path = "/api/futures/v3/orders/#{instrument_id}"
-          private_endpoint(request_path:, ms_iso8601:)
+          request_path = URI("/api/futures/v3/orders/#{instrument_id}")
+          params = {state:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#futures-order_information
@@ -463,6 +534,8 @@ module Comptacrypto
         # @option [String] order_id
         # @option [String] client_iod
         def future_order_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, client_oid: nil)
+          raise ::ArgumentError if client_iod.nil? && order_id.nil?
+
           request_path = if client_oid.nil?
             "/api/futures/v3/orders/#{instrument_id}/#{order_id}"
           else
@@ -482,7 +555,11 @@ module Comptacrypto
         # @option [String] before Pagination of data to return records new than the requested trade_id
         # @option [String] limit The maximum is 100; the default is 100
         def future_transaction_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id:, after: nil, before: nil, limit: "100")
-          private_endpoint(request_path: "/api/futures/v3/fills", ms_iso8601:)
+          request_path = URI("/api/futures/v3/fills")
+          params = {instrument_id:, order_id:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#futures-trade_fee
@@ -495,7 +572,11 @@ module Comptacrypto
         def future_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, underlying: nil)
           raise ::ArgumentError if category.nil? && underlying.nil?
 
-          private_endpoint(request_path: "/api/futures/v3/trade_fee", ms_iso8601:)
+          request_path = URI("/api/futures/v3/trade_fee")
+          params = {category:, underlying:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#futures-hold_amount
@@ -537,8 +618,11 @@ module Comptacrypto
         # @option [String] type 3.Tokens Borrowed, 4.Tokers Repaid, 5.Interest Accrued, 7.Buy, 8.Sell, 9.From Funding, 10.From C2C,
         # 12.From Spot, 14.To Funding, 15.To C2C, 16.To Spot, 19.Auto Interest Payment, 24.Liquidation Fees, 59.Repay Candy, 61.To Margin, 62.From Margin
         def margin_bill_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, after: nil, before: nil, limit: "100", type: nil)
-          request_path = "/api/margin/v3/accounts/#{instrument_id}/ledger"
-          private_endpoint(request_path:, ms_iso8601:)
+          request_path = URI("/api/margin/v3/accounts/#{instrument_id}/ledger")
+          params = {after:, before:, limit:, type:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#spot_leverage-record
@@ -550,7 +634,11 @@ module Comptacrypto
         # @option [String] before Pagination of data to return records newer than the requested borrow_id
         # @option [String] limit The maximum is 100; the default is 100
         def margin_loan_history(ms_iso8601 = remote_ms_iso8601, status:, after: nil, before: nil, limit: "100")
-          private_endpoint(request_path: "/api/margin/v3/accounts/borrowed", ms_iso8601:)
+          request_path = URI("/api/margin/v3/accounts/borrowed")
+          params = {status:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#spot_leverage-list
@@ -564,7 +652,11 @@ module Comptacrypto
         # @param state [String] -2 = Failed, -1 = Canceled, 0 = Open, 1 = Partially Filled, 2 = Fully Filled,
         # 3 = Submitting, 4 = Canceling, 6 = Incomplete (open + partially filled), 7 = Complete (canceled + fully filled)
         def margin_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, after:, before:, limit: "100", state:)
-          private_endpoint(request_path: "/api/margin/v3/orders", ms_iso8601:)
+          request_path = URI("/api/margin/v3/orders")
+          params = {instrument_id:, state:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#spot_leverage-get_leverage
@@ -587,12 +679,15 @@ module Comptacrypto
         # @option [String] client_iod
         def margin_order_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, client_oid: nil)
           request_path = if client_oid.nil?
-            "/api/futures/v3/orders/#{order_id}"
+            URI("/api/futures/v3/orders/#{order_id}")
           else
-            "/api/futures/v3/orders/#{client_iod}"
+            URI("/api/futures/v3/orders/#{client_iod}")
           end
 
-          private_endpoint(request_path:, ms_iso8601:)
+          params = {instrument_id:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#spot_leverage-orders_pending
@@ -604,7 +699,11 @@ module Comptacrypto
         # @param before [String] Pagination of data to return records newer than the requested order_id
         # @param limit [String] The maximum is 100; the default is 100
         def margin_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, after:, before:, limit: "100")
-          private_endpoint(request_path: "/api/margin/v3/orders_pending", ms_iso8601:)
+          request_path = URI("/api/margin/v3/orders_pending")
+          params = {instrument_id:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs/en/#spot_leverage-detail
@@ -617,7 +716,11 @@ module Comptacrypto
         # @option [String] before Pagination of data to return records newer than the requested order_id
         # @option [String] limit The maximum is 100; the default is 100
         def margin_transaction_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, after:, before:, limit: "100")
-          private_endpoint(request_path: "/api/margin/v3/fills", ms_iso8601:)
+          request_path = URI("/api/margin/v3/fill")
+          params = {instrument_id:, order_id:, after:, before:, limit:}.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
 
         private
