@@ -43,9 +43,117 @@ module Comptacrypto
           private_endpoint(request_path: "/api/spot/v3/accounts", ms_iso8601:)
         end
 
+        # @ see https://www.okx.com/docs/en/#spot-singleness
+        #
+        # GET /api/spot/v3/accounts/<currency>
+        #
+        # @param :currency [String] Token symbol, e.g. 'BTC'
+        def spot_currency(ms_iso8601 = remote_ms_iso8601, currency: nil)
+          request_path = "/api/spot/v3/accounts/#{currency}"
+
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot-query
+        #
+        # GET /api/spot/v3/accounts/<currency>/ledger
+        #
+        # @param :currency [String] : e.g. 'BTC'
+        # @option [String] :type 1.Deposit 2.Withdraw 7.Buy 8.Sell 18.From futures 19.To futures 20.To Sub-account,
+        # 21.From Sub-account 22.Transaction Fee Rebate 25.OTC purchase 26.OTC Sell 29.To funding 30.From funding 31.To C2C,
+        # 32.From C2C 33.To Margin 34.From Margin 35.Tokens Borrowed 36.Token Repaid 37.Market Maker Reward 39.Transfer-in Fee
+        # 40.Transfer-out Fee 41.Spot Fee Paid with Loyalty Points 42.Loyalty Point Purchase 43.Loyalty Point Transfer
+        # 44.Market Maker Bonus 46.From Spot 47.To Spot 48.To ETT 49.From ETT 50.To Mining 51.From Mining 52.Referral Program 53.Incentive Tokens
+        # 54.Reversal 55.From Savings 56.To Savings 57.From Swap 58.To Swap 59.Repay Candy 60.Hedge Fee 61.To Hedge Account 62.From Hedge Account
+        # 63.Margin Interest Paid with Loyalty Points 64.From Mining 65.To Mining 66.To Option Account 67.From Option Account
+        # @option [String] :after Pagination of data to return records earlier than the requested ledger_id.
+        # @option [String] :before Pagination of data to return records new than the requested ledger_id.
+        # @option [String] :limit Number of results per request. The maximum is 100; the default is 100
+        def spot_bill_detail(ms_iso8601 = remote_ms_iso8601, currency:, type: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/spot/v3/accounts/#{currency}/ledger")
+          params = { type:, after:, before:, limit: }.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot-list
+        #
+        # GET /api/spot/v3/orders
+        #
+        # @param instrument_id [String]
+        # @param state [String] -2 = Failed, -1 = Canceled, 0 = Open, 1 = Partially Filled, 2 = Fully Filled,
+        # 3 = Submitting, 4 = Canceling, 6 = Incomplete (open + partially filled), 7 = Complete (canceled + fully filled)
+        # @option after [String] Pagination of data to return records earlier than the requested order_id
+        # @option before [String] Pagination of data to return records newer than the requested order_id
+        # @option limit [String] The maximum is 100; the default is 100
+        def spot_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, state:, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/spot/v3/orders")
+          params = { instrument_id:, state:, after:, before:, limit: }.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot-orders_pending
+        #
+        # GET /api/spot/v3/orders_pending
+        #
+        # @param instrument_id [String]
+        # @option after [String] Pagination of data to return records earlier than the requested order_id
+        # @option before [String] Pagination of data to return records newer than the requested order_id
+        # @option limit [String] The maximum is 100; the default is 100
+        def spot_order_pending(ms_iso8601 = remote_ms_iso8601, instrument_id:, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/spot/v3/orders_pending")
+          params = { instrument_id:, after:, before:, limit: }.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot-order_information
+        #
+        # GET /api/spot/v3/orders/<order_id> OR GET /api/spot/v3/orders/<client_oid>
+        #
+        # @param instrument_id [String]
+        # Either client_oid or order_id must be present.
+        # @option [String] order_id
+        # @option [String] client_iod
+        def spot_order_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, client_iod: nil, order_id: nil)
+          raise ::ArgumentError if client_iod.nil? && order_id.nil?
+
+          request_path = if client_iod.nil?
+                           URI("/api/spot/v3/orders/#{order_id}")
+                         else
+                           URI("/api/spot/v3/orders/#{client_iod}")
+                         end
+
+          params = { instrument_id: }.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot-trade_fee
+        #
+        #  GET /api/spot/v3/trade_fee
+        #
+        # Choose and enter one parameter between category and instrument_id
+        # @option [String] :category Fee Schedule Tier: 1：Tier 1; 2：Tier 2;4：Tier 4
+        # @option [String] :instrument_id contract ID，eg：BTC-USD-SWAP
+        def spot_trade_fee(ms_iso8601 = remote_ms_iso8601, category: nil, instrument_id: nil)
+          raise ::ArgumentError if category.nil? && instrument_id.nil?
+
+          request_path = URI("/api/spot/v3/trade_fee")
+          params = { instrument_id:, category: }.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
         # @see https://www.okx.com/docs/en/#spot-detail
         #
-        # GET/api/spot/v3/fills
+        # GET /api/spot/v3/fills
         #
         # @option [String] :order_id
         # @option [String] :instrument_id
@@ -55,6 +163,27 @@ module Comptacrypto
         def spot_transaction_detail(ms_iso8601 = remote_ms_iso8601, order_id: nil, instrument_id: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/spot/v3/fills")
           params = { order_id:, instrument_id:, after:, before:, limit: }.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs/en/#spot-algo_list
+        #
+        # GET /api/spot/v3/algo
+        #
+        # @param instrument_id [String]
+        # @param order_type [String]
+        # @option [String] :status Order status: 1. Pending; 2. 2. Effective; 3. Cancelled; 4. Partially effective; 5. Paused; 6. Order failed
+        # @option [String] :algo_id Enquiry specific order ID
+        # @option [String] :before Request page content after this ID
+        # @option [String] :after Request page content before this ID
+        # @option [String] :limit Default and maximum are both 100
+        def spot_algo_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_type:, status: nil, algo_id: nil, before: nil, after: nil, limit: "100")
+          raise ::ArgumentError if status.nil? && algo_id.nil?
+
+          request_path = URI("/api/swap/v3/order_algo")
+          params = { instrument_id:, order_type:, status:, algo_id:, after:, before:, limit: }.compact
           request_path.query = URI.encode_www_form(params)
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
@@ -153,7 +282,7 @@ module Comptacrypto
         # @option [String] :after Pagination of data to return records earlier than the requested ledger_id.
         # @option [String] :before Pagination of data to return records new than the requested ledger_id.
         # @option [String] :limit Number of results per request. The maximum is 100; the default is 100
-        def funding_bill_detail(ms_iso8601 = remote_ms_iso8601, currency:, type:, after: nil, before: nil, limit: "100")
+        def funding_bill_detail(ms_iso8601 = remote_ms_iso8601, currency: nil, type: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/account/v3/ledger")
           params = { currency:, type:, after:, before:, limit: }.compact
           request_path.query = URI.encode_www_form(params)
