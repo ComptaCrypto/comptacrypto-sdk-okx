@@ -115,7 +115,8 @@ module Comptacrypto
         # @param instType [String] SPOT, MARGIN, SWAP, FUTURES, OPTION
         # @option [String] uly
         # @option [String] instId
-        # @option [String] ordType : market: Market order, limit: Limit order, post_only: Post-only order, fok: Fill-or-kill order, ioc: Immediate-or-cancel order, Optimal_limit_ioc :Market order with immediate-or-cancel order
+        # @option [String] ordType : market: Market order, limit: Limit order, post_only: Post-only order,
+        # fok: Fill-or-kill order, ioc: Immediate-or-cancel order, Optimal_limit_ioc :Market order with immediate-or-cancel order
         # @option [String] state : canceled, filled
         # @option [String] category : twap, adl, full_liquidation, partial_liquidation, delivery, ddh
         # @option [String] after : Pagination of data to return records earlier than the requested ordId
@@ -393,7 +394,7 @@ module Comptacrypto
         # @option [String] instType
         # @option [String] instId
         # @option [String] posId
-        def account_get_balance(ms_iso8601 = remote_ms_iso8601, instType: nil, instId: nil, posId: nil)
+        def account_get_positions(ms_iso8601 = remote_ms_iso8601, instType: nil, instId: nil, posId: nil)
           request_path = URI("/api/v5/account/positions")
           query_params = { instType:, instId:, posId: }.compact
           request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
@@ -413,7 +414,7 @@ module Comptacrypto
         # @option [String] ccy
         # @option [String] mgnMode isolated, cross
         # @option [String] ctType linear, inverse. Only applicable to FUTURES/SWAP
-        # @option [String] type 1: Transfer 2: Trade 3: Delivery 4: Auto token conversion 5: Liquidation 6: Margin transfer 
+        # @option [String] type 1: Transfer 2: Trade 3: Delivery 4: Auto token conversion 5: Liquidation 6: Margin transfer
         # 7: Interest deduction 8: Funding fee 9: ADL 10: Clawback 11: System token conversion 12: Strategy transfer 13: ddh
         # @option [String] subType 1: Buy 2: Sell 3: Open long 4: Open short 5: Close long 6: Close short 9: Interest deduction for Market loans
         # 11: Transfer in 12: Transfer out 14: Interest deduction for VIP loans 160: Manual margin increase 161: Manual margin decrease 162: Auto margin increase
@@ -441,7 +442,7 @@ module Comptacrypto
         # @option [String] ccy
         # @option [String] mgnMode isolated, cross
         # @option [String] ctType linear, inverse. Only applicable to FUTURES/SWAP
-        # @option [String] type 1: Transfer 2: Trade 3: Delivery 4: Auto token conversion 5: Liquidation 6: Margin transfer 
+        # @option [String] type 1: Transfer 2: Trade 3: Delivery 4: Auto token conversion 5: Liquidation 6: Margin transfer
         # 7: Interest deduction 8: Funding fee 9: ADL 10: Clawback 11: System token conversion 12: Strategy transfer 13: ddh
         # @option [String] subType 1: Buy 2: Sell 3: Open long 4: Open short 5: Close long 6: Close short 9: Interest deduction for Market loans
         # 11: Transfer in 12: Transfer out 14: Interest deduction for VIP loans 160: Manual margin increase 161: Manual margin decrease 162: Auto margin increase
