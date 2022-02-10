@@ -65,6 +65,17 @@ client_v3.withdrawal_history.body
 #         "status" => "2"
 #       }
 #     ]
+
+# Initialization of a client v5
+client_v5 = Comptacrypto::Sdk::Okx::ClientV5.new(
+  api_key: ENV.fetch("OKX_API_KEY", "42"),
+  secret_key: ENV.fetch("OKX_SECRET_KEY", "secret"),
+  passphrase: ENV.fetch("OKX_PASSPHRASE", "secret")
+)
+
+# Send a request to query server time
+client_v5.time # => #<Faraday::Response:0x00007f74e3a758f0>
+client_v5.time.body # => {"code"=>"0", "data"=>[{"ts"=>"1644499170774"}], "msg"=>""}
 ```
 
 ## Test

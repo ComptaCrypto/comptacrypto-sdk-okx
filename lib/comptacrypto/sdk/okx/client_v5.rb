@@ -16,7 +16,7 @@ module Comptacrypto
         BASE_URL   = "https://www.okx.com"
         USER_AGENT = "ComptaCrypto/OKX"
 
-        def initialize(api_key: ENV["OKX_API_KEY"], secret_key: ENV["OKX_SECRET_KEY"], passphrase: ENV["OKX_PASSPHRASE"], base_url: ENV["OKX_BASE_URL"])
+        def initialize(api_key: ENV["OKX_API_KEY"], secret_key: ENV["OKX_SECRET_KEY"], passphrase: ENV["OKX_PASSPHRASE"], base_url: ENV["OKX_BASE_V5_URL"])
           @api_key    = String(api_key).encode("UTF-8")
           @secret_key = String(secret_key).encode("UTF-8")
           @passphrase = String(passphrase).encode("UTF-8")
@@ -26,6 +26,63 @@ module Comptacrypto
             f.response :json     # decode response bodies as JSON
             f.adapter  :net_http # adds the adapter to the connection, defaults to `Faraday.default_adapter`
           end
+        end
+
+        # Public Endpoints
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-public-data-get-system-time
+        def time
+          public_endpoint(request_path: "/api/v5/public/time")
+        end
+
+        # Private Endpoints
+
+        # Get withdrawal history
+        #
+        # @note Retrieve the withdrawal records according to the currency, withdrawal
+        #   status, and time range in reverse chronological order. The 100 most
+        #   recent records are returned by default.
+        #
+        #   GET /api/v5/asset/withdrawal-history
+        #
+        # @param ccy    [String] Currency, e.g. "`BTC`"
+        # @param tx_id  [String] Hash record of the deposit
+        # @param state  [String] Status of withdrawal (from "`-3`" to "`5`")
+        # @param after  [String] Pagination of data to return records earlier than the requested ts, Unix timestamp format in milliseconds, e.g. "`1597026383085`"
+        # @param before [String] Pagination of data to return records newer than the requested ts, Unix timestamp format in milliseconds, e.g. "`1597026383085`"
+        # @param limit  [String] Number of results per request. The maximum is `100`; the default is `100`
+        #
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-withdrawal-history
+        def withdrawal_history(ms_iso8601 = remote_ms_iso8601, ccy: nil, tx_id: nil, state: nil, after: nil, before: nil, limit: nil)
+          request_path = URI("/api/v5/asset/withdrawal-history")
+          query_params = { ccy:, tx_id:, state:, after:, before:, limit: }.compact
+          request_path.query = ::URI.encode_www_form(query_params) if query_params.any?
+
+          private_endpoint(request_path:, ms_iso8601:)
+        end
+
+        private
+
+        def public_endpoint(request_path:)
+          conn.get(request_path)
+        end
+
+        def private_endpoint(request_path:, ms_iso8601:)
+          conn.get(request_path) do |req|
+            req.headers["OK-ACCESS-KEY"]        = api_key
+            req.headers["OK-ACCESS-SIGN"]       = sign(request_path:, ms_iso8601:)
+            req.headers["OK-ACCESS-TIMESTAMP"]  = ms_iso8601
+            req.headers["OK-ACCESS-PASSPHRASE"] = passphrase
+          end
+        end
+
+        def remote_ms_iso8601
+          ms_ts_str = time.body.fetch("data").fetch(0).fetch("ts")
+          ::Time.strptime(ms_ts_str, "%Q").utc.iso8601(3)
+        end
+
+        def sign(request_path:, ms_iso8601:)
+          Base64EncodedSignature.new(secret_key:).call(request_path:, ms_iso8601:)
         end
       end
     end
