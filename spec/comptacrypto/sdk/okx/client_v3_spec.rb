@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe Comptacrypto::Sdk::Okx::Client do
-  subject(:client) do
+RSpec.describe Comptacrypto::Sdk::Okx::ClientV3 do
+  subject(:client_v3) do
     described_class.new
   end
 
@@ -14,7 +14,7 @@ RSpec.describe Comptacrypto::Sdk::Okx::Client do
     end
 
     it "returns the server time in milliseconds" do
-      expect(client.time.body).to eq payload
+      expect(client_v3.time.body).to eq payload
     end
   end
 
@@ -32,7 +32,7 @@ RSpec.describe Comptacrypto::Sdk::Okx::Client do
     end
 
     it "returns the first trading pair" do
-      expect(client.trading_pairs.body.fetch(0)).to eq first_trading_pair
+      expect(client_v3.trading_pairs.body.fetch(0)).to eq first_trading_pair
     end
   end
 
@@ -69,7 +69,7 @@ RSpec.describe Comptacrypto::Sdk::Okx::Client do
     end
 
     xit "returns the withdrawal history" do
-      expect(client.withdrawal_history.body).to eq payload
+      expect(client_v3.withdrawal_history.body).to eq payload
     end
   end
 end

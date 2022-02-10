@@ -13,7 +13,7 @@ iso8601_path = "spec/CURRENT_TIME.iso8601"
 # To be sure that our time is correct, and that it is not greater than
 # OKX's, we will lock out testing environment time to its internal clock.
 
-ms_ts_str  = Comptacrypto::Sdk::Okx::Client.new.time.body.fetch("epoch").delete(".")
+ms_ts_str  = Comptacrypto::Sdk::Okx::ClientV3.new.time.body.fetch("epoch").delete(".")
 ms_iso8601 = Time.strptime(ms_ts_str, "%Q").utc.iso8601(3)
 
 File.write(iso8601_path, "#{ms_iso8601}\n") unless File.exist?(iso8601_path)

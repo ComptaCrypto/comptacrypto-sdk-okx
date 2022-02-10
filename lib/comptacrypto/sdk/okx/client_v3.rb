@@ -9,7 +9,7 @@ require_relative "base64_encoded_signature"
 module Comptacrypto
   module Sdk
     module Okx
-      class Client
+      class ClientV3
         attr_reader :api_key, :secret_key, :passphrase, :conn
 
         BASE_URL   = "https://www.okex.com"
