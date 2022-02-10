@@ -5,7 +5,7 @@ RSpec.describe Comptacrypto::Sdk::Okx::ClientV5 do
     described_class.new
   end
 
-  describe "#withdrawal_history", :vcr do
+  describe "#funding_get_withdrawal_history", :vcr do
     let(:payload) do
       {
         "code" => "0",
@@ -15,7 +15,7 @@ RSpec.describe Comptacrypto::Sdk::Okx::ClientV5 do
     end
 
     it "returns the withdrawal history" do
-      expect(client_v5.withdrawal_history.body).to eq payload
+      expect(client_v5.funding_get_withdrawal_history.body).to eq payload
     end
   end
 end
