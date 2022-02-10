@@ -34,6 +34,11 @@ module Comptacrypto
           public_endpoint(request_path: "/api/general/v3/time")
         end
 
+        # @see https://www.okx.com/docs/en/#spot-currency
+        def trading_pairs
+          public_endpoint(request_path: "/api/spot/v3/instruments")
+        end
+
         # Private Endpoints
 
         # @see https://www.okx.com/docs/en/#spot-account_information

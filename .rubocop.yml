@@ -52,6 +52,9 @@ Metrics/MethodLength:
 Metrics/ParameterLists:
   Max: 30
 
+Metrics/ClassLength:
+  Enabled: false
+
 Naming/MethodParameterName:
   Enabled: false
 

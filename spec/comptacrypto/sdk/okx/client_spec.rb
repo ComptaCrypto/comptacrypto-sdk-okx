@@ -18,6 +18,24 @@ RSpec.describe Comptacrypto::Sdk::Okx::Client do
     end
   end
 
+  describe "#trading_pairs", :vcr do
+    let(:first_trading_pair) do
+      {
+        "base_currency" => "BTC",
+        "instrument_id" => "BTC-USDT",
+        "min_size" => "0.00001",
+        "quote_currency" => "USDT",
+        "size_increment" => "0.00000001",
+        "category" => "1",
+        "tick_size" => "0.1"
+      }
+    end
+
+    it "returns the first trading pair" do
+      expect(client.trading_pairs.body.fetch(0)).to eq first_trading_pair
+    end
+  end
+
   describe "#withdrawal_history", :vcr do
     # @todo When the authentication will be corrected,
     #   we will be able to generate a VCR cassette and refresh the payload.
