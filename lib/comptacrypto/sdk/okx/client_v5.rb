@@ -88,7 +88,7 @@ module Comptacrypto
         #
         # GET /api/v5/trade/orders-history
         #
-        # @param :instType [String] SPOT, MARGIN, SWAP, FUTURES, OPTION
+        # @param instType [String] SPOT, MARGIN, SWAP, FUTURES, OPTION
         # @option [String] uly
         # @option [String] instId
         # @option [String] ordType : market: Market order, limit: Limit order, post_only: Post-only order,
@@ -112,7 +112,7 @@ module Comptacrypto
         #
         # GET /api/v5/trade/orders-history-archive
         #
-        # @param :instType [String] SPOT, MARGIN, SWAP, FUTURES, OPTION
+        # @param instType [String] SPOT, MARGIN, SWAP, FUTURES, OPTION
         # @option [String] uly
         # @option [String] instId
         # @option [String] ordType : market: Market order, limit: Limit order, post_only: Post-only order, fok: Fill-or-kill order, ioc: Immediate-or-cancel order, Optimal_limit_ioc :Market order with immediate-or-cancel order
@@ -156,7 +156,7 @@ module Comptacrypto
         #
         # GET /api/v5/trade/fills-history
         #
-        # @param :instType [String] SPOT, MARGIN, SWAP, FUTURES, OPTION
+        # @param instType [String] SPOT, MARGIN, SWAP, FUTURES, OPTION
         # @option [String] uly
         # @option [String] instId
         # @option [String] ordId
@@ -175,7 +175,7 @@ module Comptacrypto
         #
         # GET /api/v5/trade/orders-algo-pending
         #
-        # @param :ordType [String] conditional: One-way stop order, oco: One-cancels-the-other order, trigger: Trigger order, move_order_stop: Trailing order, iceberg: Iceberg order, twap: TWAP order
+        # @param ordType [String] conditional: One-way stop order, oco: One-cancels-the-other order, trigger: Trigger order, move_order_stop: Trailing order, iceberg: Iceberg order, twap: TWAP order
         # @option [String] algoId
         # @option [String] instType
         # @option [String] instId
@@ -195,7 +195,7 @@ module Comptacrypto
         # DO NOT WORK response_body={"msg"=>"Invalid Sign", "code"=>"50113"}
         # GET /api/v5/trade/orders-algo-history
         #
-        # @param :ordType [String] conditional: One-way stop order, oco: One-cancels-the-other order, trigger: Trigger order, move_order_stop: Trailing order, iceberg: Iceberg order, twap: TWAP order
+        # @param ordType [String] conditional: One-way stop order, oco: One-cancels-the-other order, trigger: Trigger order, move_order_stop: Trailing order, iceberg: Iceberg order, twap: TWAP order
         # Either state or algoId is requied
         # @option [String] state effective, canceled, order_failed
         # @option [String] algoId
@@ -513,6 +513,48 @@ module Comptacrypto
         #
         # GET /api/v5/account/greeks
 
+        # @see https://www.okx.com/docs-v5/en/#rest-api-subaccount-view-sub-account-list
+        #
+        # @note Applies to master accounts only
+        # GET /api/v5/users/subaccount/list
+        #
+        # @option [String] enable Sub-account status，true: Normal ; false: Frozen
+        # @option [String] subAcct Sub-account name
+        # @option [String] after If you query the data prior to the requested creation time ID, the value will be a Unix timestamp in millisecond format.
+        # @option [String] before If you query the data after the requested creation time ID, the value will be a Unix timestamp in millisecond format.
+        # @option [String] limit The maximum is 100; The default is 100
+        def subaccount_view_sub_account_list(ms_iso8601 = remote_ms_iso8601, enable: nil, subAcct: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/v5/users/subaccount/list")
+          query_params = { enable:, subAcct:, after:, before:, limit: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-subaccount-query-the-apikey-of-a-sub-account
+        #
+        # GET /api/v5/users/subaccount/apikey
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-subaccount-get-sub-account-balance
+        #
+        # GET /api/v5/account/subaccount/balances
+        #
+        # @param subAcct [String] Sub-account name
+        def subaccount_get_sub_account_balance(ms_iso8601 = remote_ms_iso8601, subAcct:)
+          request_path = URI("/api/v5/account/subaccount/balances")
+          query_params = { subAcct: }.compact
+          request_path.query = URI.encode_www_form(query_params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-subaccount-history-of-sub-account-transfer
+        #
+        # GET /api/v5/asset/subaccount/bills
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-subaccount-get-custody-trading-sub-account-list
+        #
+        # GET /api/v5/users/entrust-subaccount-list
 
         private
 
