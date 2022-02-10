@@ -19,7 +19,7 @@ http_interactions:
       message: ''
     headers:
       Date:
-      - Tue, 08 Feb 2022 07:57:58 GMT
+      - Thu, 10 Feb 2022 13:59:26 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -27,7 +27,7 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - locale=en_US; Max-Age=604800; Expires=Tue, 15-Feb-2022 07:57:58 GMT; Path=/
+      - locale=en_US; Max-Age=604800; Expires=Thu, 17-Feb-2022 13:59:26 GMT; Path=/
       X-Content-Type-Options:
       - nosniff
       X-Xss-Protection:
@@ -51,9 +51,9 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 6da34f653997cde3-CDG
+      - 6db5dba5bb40eddb-CDG
     body:
       encoding: ASCII-8BIT
-      string: '{"iso":"2022-02-08T07:57:58.088Z","epoch":"1644307078.088"}'
-  recorded_at: Tue, 08 Feb 2022 07:57:57 GMT
+      string: '{"iso":"2022-02-10T13:59:26.459Z","epoch":"1644501566.459"}'
+  recorded_at: Thu, 10 Feb 2022 13:59:25 GMT
 recorded_with: VCR 6.0.0

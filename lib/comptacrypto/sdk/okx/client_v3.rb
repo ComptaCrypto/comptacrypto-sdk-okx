@@ -15,7 +15,7 @@ module Comptacrypto
         BASE_URL   = "https://www.okex.com"
         USER_AGENT = "ComptaCrypto/OKX"
 
-        def initialize(api_key: ENV["OKX_API_KEY"], secret_key: ENV["OKX_SECRET_KEY"], passphrase: ENV["OKX_PASSPHRASE"], base_url: ENV["OKX_BASE_URL"])
+        def initialize(api_key: ENV["OKX_API_KEY"], secret_key: ENV["OKX_SECRET_KEY"], passphrase: ENV["OKX_PASSPHRASE"], base_url: ENV["OKX_BASE_V3_URL"])
           @api_key    = String(api_key).encode("UTF-8")
           @secret_key = String(secret_key).encode("UTF-8")
           @passphrase = String(passphrase).encode("UTF-8")
@@ -53,7 +53,7 @@ module Comptacrypto
         #
         # GET /api/spot/v3/accounts/<currency>
         #
-        # @param :currency [String] Token symbol, e.g. 'BTC'
+        # @param currency [String] Token symbol, e.g. 'BTC'
         def spot_currency(ms_iso8601 = remote_ms_iso8601, currency:)
           request_path = "/api/spot/v3/accounts/#{currency}"
 
@@ -78,7 +78,7 @@ module Comptacrypto
         def spot_bill_detail(ms_iso8601 = remote_ms_iso8601, currency:, type: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/spot/v3/accounts/#{currency}/ledger")
           params = { type:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -96,7 +96,7 @@ module Comptacrypto
         def spot_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, state:, after: nil, before: nil, limit: "100")
           request_path = URI("/api/spot/v3/orders")
           params = { instrument_id:, state:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -112,7 +112,7 @@ module Comptacrypto
         def spot_order_pending(ms_iso8601 = remote_ms_iso8601, instrument_id:, after: nil, before: nil, limit: "100")
           request_path = URI("/api/spot/v3/orders_pending")
           params = { instrument_id:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -136,7 +136,7 @@ module Comptacrypto
                          end
 
           params = { instrument_id: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -153,7 +153,7 @@ module Comptacrypto
 
           request_path = URI("/api/spot/v3/trade_fee")
           params = { instrument_id:, category: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -170,7 +170,7 @@ module Comptacrypto
         def spot_transaction_detail(ms_iso8601 = remote_ms_iso8601, order_id: nil, instrument_id: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/spot/v3/fills")
           params = { order_id:, instrument_id:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -191,7 +191,7 @@ module Comptacrypto
 
           request_path = URI("/api/swap/v3/order_algo")
           params = { instrument_id:, order_type:, status:, algo_id:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -211,7 +211,7 @@ module Comptacrypto
         def funding_sub_account(ms_iso8601 = remote_ms_iso8601, sub_account:)
           request_path = URI("/api/account/v3/sub-account")
           params = { "sub-account": sub_account }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -226,7 +226,7 @@ module Comptacrypto
         def funding_asset_valuation(ms_iso8601 = remote_ms_iso8601, account_type: nil, valuation_currency: nil)
           request_path = URI("/api/account/v3/asset-valuation")
           params = { account_type:, valuation_currency: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -250,7 +250,7 @@ module Comptacrypto
         def funding_transfer_state(ms_iso8601 = remote_ms_iso8601, transfer_id:)
           request_path = URI("/api/account/v3/transfer/state")
           params = { transfer_id: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -292,7 +292,7 @@ module Comptacrypto
         def funding_bill_detail(ms_iso8601 = remote_ms_iso8601, currency: nil, type: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/account/v3/ledger")
           params = { currency:, type:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -305,7 +305,7 @@ module Comptacrypto
         def deposit_address(ms_iso8601 = remote_ms_iso8601, currency:)
           request_path = URI("/api/account/v3/deposit/address")
           params = { currency: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -329,7 +329,7 @@ module Comptacrypto
         def deposit_history_currency(ms_iso8601 = remote_ms_iso8601, currency:, after: nil, before: nil, limit: "100")
           request_path = URI("/api/account/v3/deposit/history/#{currency}")
           params = { after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -358,7 +358,7 @@ module Comptacrypto
         def withdrawal_fee(ms_iso8601 = remote_ms_iso8601, currency: nil)
           request_path = URI("/api/account/v3/withdrawal/fee")
           params = { currency: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -405,7 +405,7 @@ module Comptacrypto
         def swap_bill_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, type: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/swap/v3/accounts/#{instrument_id}/ledger")
           params = { type:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -423,7 +423,7 @@ module Comptacrypto
         def swap_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, state:, after: nil, before: nil, limit: "100")
           request_path = URI("/api/swap/v3/orders/#{instrument_id}")
           params = { state:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -461,7 +461,7 @@ module Comptacrypto
         def swap_transaction_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/swap/v3/fills")
           params = { instrument_id:, order_id:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -486,7 +486,7 @@ module Comptacrypto
 
           request_path = URI("/api/swap/v3/trade_fee")
           params = { instrument_id:, category: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -509,7 +509,7 @@ module Comptacrypto
 
           request_path = URI("/api/swap/v3/order_algo/#{instrument_id}")
           params = { order_type:, status:, algo_id:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -523,7 +523,7 @@ module Comptacrypto
         def option_position(ms_iso8601 = remote_ms_iso8601, underlying:, instrument_id: nil)
           request_path = URI("/api/option/v3/#{underlying}/position")
           params = { instrument_id: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -573,7 +573,7 @@ module Comptacrypto
         def option_order_list(ms_iso8601 = remote_ms_iso8601, underlying:, state:, instrument_id: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/option/v3/orders/#{underlying}")
           params = { state:, instrument_id:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -591,7 +591,7 @@ module Comptacrypto
         def option_fill(ms_iso8601 = remote_ms_iso8601, underlying:, order_id: nil, instrument_id: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/option/v3/fills/#{underlying}")
           params = { order_id:, instrument_id:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -607,7 +607,7 @@ module Comptacrypto
         def option_bill_detail(ms_iso8601 = remote_ms_iso8601, underlying:, after: nil, before: nil, limit: "100")
           request_path = URI("/api/option/v3/accounts/#{underlying}/ledger")
           params = { after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -624,7 +624,7 @@ module Comptacrypto
 
           request_path = URI("/api/option/v3/trade_fee")
           params = { category:, underlying: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -658,7 +658,7 @@ module Comptacrypto
         def future_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, state:, after: nil, before: nil, limit: "100")
           request_path = URI("/api/futures/v3/orders/#{instrument_id}")
           params = { state:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -696,7 +696,7 @@ module Comptacrypto
         def future_transaction_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id:, after: nil, before: nil, limit: "100")
           request_path = URI("/api/futures/v3/fills")
           params = { instrument_id:, order_id:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -713,7 +713,7 @@ module Comptacrypto
 
           request_path = URI("/api/futures/v3/trade_fee")
           params = { category:, underlying: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -759,7 +759,7 @@ module Comptacrypto
         def margin_bill_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, after: nil, before: nil, limit: "100", type: nil)
           request_path = URI("/api/margin/v3/accounts/#{instrument_id}/ledger")
           params = { after:, before:, limit:, type: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -775,7 +775,7 @@ module Comptacrypto
         def margin_loan_history(ms_iso8601 = remote_ms_iso8601, status:, after: nil, before: nil, limit: "100")
           request_path = URI("/api/margin/v3/accounts/borrowed")
           params = { status:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -793,7 +793,7 @@ module Comptacrypto
         def margin_order_list(ms_iso8601 = remote_ms_iso8601, instrument_id:, state:, after:, before:, limit: "100")
           request_path = URI("/api/margin/v3/orders")
           params = { instrument_id:, state:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -827,7 +827,7 @@ module Comptacrypto
                          end
 
           params = { instrument_id: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -843,7 +843,7 @@ module Comptacrypto
         def margin_order_pending(ms_iso8601 = remote_ms_iso8601, instrument_id:, after:, before:, limit: "100")
           request_path = URI("/api/margin/v3/orders_pending")
           params = { instrument_id:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
@@ -853,14 +853,14 @@ module Comptacrypto
         # GET /api/margin/v3/fills
         #
         # @param instrument_id [String]
-        # @option order_id
-        # @option [String] after Pagination of data to return records earlier than the requested order_id
-        # @option [String] before Pagination of data to return records newer than the requested order_id
-        # @option [String] limit The maximum is 100; the default is 100
+        # @param order_id [String]
+        # @param after [String] Pagination of data to return records earlier than the requested order_id
+        # @param before [String] Pagination of data to return records newer than the requested order_id
+        # @param limit [String] The maximum is 100; the default is 100
         def margin_transaction_detail(ms_iso8601 = remote_ms_iso8601, instrument_id:, order_id: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/margin/v3/fill")
           params = { instrument_id:, order_id:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          request_path.query = URI.encode_www_form(params) if params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
