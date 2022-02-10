@@ -1,0 +1,101 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.okx.com/api/v5/public/time
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - ComptaCrypto/OKX
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Date:
+      - Thu, 10 Feb 2022 16:54:50 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - locale=en-US; Max-Age=604800; Expires=Thu, 17-Feb-2022 16:54:50 GMT; Path=/
+      - locale=en-US; Max-Age=604800; Expires=Thu, 17-Feb-2022 16:54:50 GMT; Path=/
+      X-Brokerid:
+      - '0'
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubdomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6db6dc95a8cc7193-LHR
+    body:
+      encoding: ASCII-8BIT
+      string: '{"code":"0","data":[{"ts":"1644512090660"}],"msg":""}'
+  recorded_at: Thu, 10 Feb 2022 13:59:25 GMT
+- request:
+    method: get
+    uri: https://www.okx.com/api/v5/trade/orders-pending?limit=100
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - ComptaCrypto/OKX
+      Ok-Access-Key:
+      - "<OKX_API_KEY>"
+      Ok-Access-Sign:
+      - BO/AxRs+MKFueQETeJw0WP0FAgXHExwq+fdibMAwcXM=
+      Ok-Access-Timestamp:
+      - '2022-02-10T16:54:50.660Z'
+      Ok-Access-Passphrase:
+      - "<OKX_PASSPHRASE>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Date:
+      - Thu, 10 Feb 2022 16:54:51 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '31'
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - locale=en-US; Max-Age=604800; Expires=Thu, 17-Feb-2022 16:54:51 GMT; Path=/
+      - locale=en-US; Max-Age=604800; Expires=Thu, 17-Feb-2022 16:54:51 GMT; Path=/
+      X-Brokerid:
+      - '0'
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubdomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6db6dc9879a875d5-LHR
+    body:
+      encoding: UTF-8
+      string: '{"code":"0","data":[],"msg":""}'
+  recorded_at: Thu, 10 Feb 2022 13:59:25 GMT
+recorded_with: VCR 6.0.0

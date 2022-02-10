@@ -268,7 +268,7 @@ module Comptacrypto
         # @option [String] ccy
         # @option [String] type
         # @option [String] after : Pagination of data to return records earlier than the requested ts, Unix timestamp format in milliseconds
-        # @option [String] before : No 	Pagination of data to return records newer than the requested ts, Unix timestamp format in milliseconds
+        # @option [String] before :	Pagination of data to return records newer than the requested ts, Unix timestamp format in milliseconds
         # @option [String] limit : Number of results per request. The maximum is 100; The default is 100
         def funding_asset_bills_details(ms_iso8601 = remote_ms_iso8601, ccy: nil, type: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/v5/asset/bills")
@@ -372,6 +372,147 @@ module Comptacrypto
         # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-public-borrow-history-public
         #
         # GET /api/v5/asset/lending-rate-history
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-balance
+        #
+        # GET /api/v5/account/balance
+        #
+        # @option [String] ccy
+        def account_get_balance(ms_iso8601 = remote_ms_iso8601, ccy: nil)
+          request_path = URI("/api/v5/account/balance")
+          query_params = { ccy: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-positions
+        #
+        # GET /api/v5/account/positions
+        #
+        # @option [String] instType
+        # @option [String] instId
+        # @option [String] posId
+        def account_get_balance(ms_iso8601 = remote_ms_iso8601, instType: nil, instId: nil, posId: nil)
+          request_path = URI("/api/v5/account/positions")
+          query_params = { instType:, instId:, posId: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-account-and-position-risk
+        #
+        # GET /api/v5/account/account-position-risk
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-bills-details-last-7-days
+        #
+        # GET /api/v5/account/bills
+        #
+        # @option [String] instType SPOT, MARGIN, SWAP, FUTURES, OPTION
+        # @option [String] ccy
+        # @option [String] mgnMode isolated, cross
+        # @option [String] ctType linear, inverse. Only applicable to FUTURES/SWAP
+        # @option [String] type 1: Transfer 2: Trade 3: Delivery 4: Auto token conversion 5: Liquidation 6: Margin transfer 
+        # 7: Interest deduction 8: Funding fee 9: ADL 10: Clawback 11: System token conversion 12: Strategy transfer 13: ddh
+        # @option [String] subType 1: Buy 2: Sell 3: Open long 4: Open short 5: Close long 6: Close short 9: Interest deduction for Market loans
+        # 11: Transfer in 12: Transfer out 14: Interest deduction for VIP loans 160: Manual margin increase 161: Manual margin decrease 162: Auto margin increase
+        # 110: Auto buy 111: Auto sell 118: System token conversion transfer in 119: System token conversion transfer out 100: Partial liquidation close long
+        # 101: Partial liquidation close short 102: Partial liquidation buy 103: Partial liquidation sell 104: Liquidation long 105: Liquidation short
+        # 106: Liquidation buy 107: Liquidation sell 110: Liquidation transfer in 111: Liquidation transfer out 125: ADL close long 126: ADL close short
+        # 127: ADL buy 128: ADL sell 131: ddh buy 132: ddh sell 170: Exercised 171: Counterparty exercised 172: Expired OTM 112: Delivery long 113: Delivery short
+        # 117: Delivery/Exercise clawback 173: Funding fee expense 174: Funding fee income 200:System transfer in 201: Manually transfer in 202: System transfer out 203: Manually transfer out
+        # @option [String] after : Pagination of data to return records earlier than the requested bill ID.
+        # @option [String] before : Pagination of data to return records newer than the requested bill ID.
+        # @option [String] limit : Number of results per request. The maximum is 100; The default is 100
+        def account_get_bills_details_last_7_days(ms_iso8601 = remote_ms_iso8601, instType: nil, ccy: nil, mgnMode: nil, ctType: nil, type: nil, subType: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/v5/account/bills")
+          query_params = { instType:, ccy:, mgnMode:, ctType:, type:, subType:, after:, before:, limit: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-bills-details-last-3-months
+        #
+        # GET /api/v5/account/bills-archive
+        #
+        # @option [String] instType SPOT, MARGIN, SWAP, FUTURES, OPTION
+        # @option [String] ccy
+        # @option [String] mgnMode isolated, cross
+        # @option [String] ctType linear, inverse. Only applicable to FUTURES/SWAP
+        # @option [String] type 1: Transfer 2: Trade 3: Delivery 4: Auto token conversion 5: Liquidation 6: Margin transfer 
+        # 7: Interest deduction 8: Funding fee 9: ADL 10: Clawback 11: System token conversion 12: Strategy transfer 13: ddh
+        # @option [String] subType 1: Buy 2: Sell 3: Open long 4: Open short 5: Close long 6: Close short 9: Interest deduction for Market loans
+        # 11: Transfer in 12: Transfer out 14: Interest deduction for VIP loans 160: Manual margin increase 161: Manual margin decrease 162: Auto margin increase
+        # 110: Auto buy 111: Auto sell 118: System token conversion transfer in 119: System token conversion transfer out 100: Partial liquidation close long
+        # 101: Partial liquidation close short 102: Partial liquidation buy 103: Partial liquidation sell 104: Liquidation long 105: Liquidation short
+        # 106: Liquidation buy 107: Liquidation sell 110: Liquidation transfer in 111: Liquidation transfer out 125: ADL close long 126: ADL close short
+        # 127: ADL buy 128: ADL sell 131: ddh buy 132: ddh sell 170: Exercised 171: Counterparty exercised 172: Expired OTM 112: Delivery long 113: Delivery short
+        # 117: Delivery/Exercise clawback 173: Funding fee expense 174: Funding fee income 200:System transfer in 201: Manually transfer in 202: System transfer out 203: Manually transfer out
+        # @option [String] after : Pagination of data to return records earlier than the requested bill ID.
+        # @option [String] before : Pagination of data to return records newer than the requested bill ID.
+        # @option [String] limit : Number of results per request. The maximum is 100; The default is 100
+        def account_get_bills_details_last_3_months(ms_iso8601 = remote_ms_iso8601, instType: nil, ccy: nil, mgnMode: nil, ctType: nil, type: nil, subType: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/v5/account/bills-archive")
+          query_params = { instType:, ccy:, mgnMode:, ctType:, type:, subType:, after:, before:, limit: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-account-configuration
+        #
+        # GET /api/v5/account/config
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-maximum-buy-sell-amount-or-open-amount
+        #
+        # GET /api/v5/account/max-size
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-maximum-available-tradable-amount
+        #
+        # GET /api/v5/account/max-avail-size
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-leverage
+        #
+        # GET /api/v5/account/leverage-info
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-the-maximum-loan-of-instrument
+        #
+        # GET /api/v5/account/max-loan
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-fee-rates
+        #
+        # GET /api/v5/account/trade-fee
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-interest-accrued-data
+        #
+        # GET /api/v5/account/interest-accrued
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-interest-rate
+        #
+        # GET /api/v5/account/interest-rate
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-maximum-withdrawals
+        #
+        # GET /api/v5/account/max-withdrawal
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-account-risk-state
+        #
+        # GET /api/v5/account/risk-state
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-borrow-and-repay-history-for-vip-loans
+        #
+        # GET /api/v5/account/borrow-repay-history
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-borrow-interest-and-limit
+        #
+        # GET /api/v5/account/interest-limits
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-account-get-greeks
+        #
+        # GET /api/v5/account/greeks
+
 
         private
 
