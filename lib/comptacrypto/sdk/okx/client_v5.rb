@@ -556,6 +556,77 @@ module Comptacrypto
         #
         # GET /api/v5/users/entrust-subaccount-list
 
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-tickers
+        #
+        # GET /api/v5/market/tickers
+        #
+        # @param instType [String] SPOT SWAP FUTURES OPTION
+        # @option [String] uly Underlying, e.g. BTC-USD. Only applicable to FUTURES/SWAP/OPTION
+        def market_data_get_tickers(ms_iso8601 = remote_ms_iso8601, instType:, uly: nil)
+          request_path = URI("/api/v5/market/tickers")
+          query_params = { instType:, uly: }.compact
+          request_path.query = URI.encode_www_form(query_params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-ticker
+        #
+        # GET /api/v5/market/ticker
+        #
+        # @param instId [String] Instrument ID, e.g. BTC-USD-SWAP
+        def market_data_get_ticker(ms_iso8601 = remote_ms_iso8601, instId:)
+          request_path = URI("/api/v5/market/ticker")
+          query_params = { instId: }.compact
+          request_path.query = URI.encode_www_form(query_params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-index-tickers
+        #
+        # GET /api/v5/market/index-tickers
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-order-book
+        #
+        # GET /api/v5/market/books
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-candlesticks
+        #
+        # GET /api/v5/market/candles
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-candlesticks-history
+        #
+        # GET /api/v5/market/history-candles
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-index-candlesticks
+        #
+        # GET /api/v5/market/index-candles
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-mark-price-candlesticks
+        #
+        # GET /api/v5/market/mark-price-candles
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-trades
+        #
+        # GET /api/v5/market/trades
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-24h-total-volume
+        #
+        # GET /api/v5/market/platform-24-volume
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-oracle
+        #
+        # GET /api/v5/market/open-oracle
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-exchange-rate
+        #
+        # GET /api/v5/market/exchange-rate
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-market-data-get-index-components
+        #
+        # GET /api/v5/market/index-components
+
         private
 
         def public_endpoint(request_path:)
