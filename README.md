@@ -26,19 +26,19 @@ bundle install
 ```ruby
 require "comptacrypto/sdk/okx"
 
-# Initialization of a client
-client = Comptacrypto::Sdk::Okx::Client.new(
+# Initialization of a client v3
+client_v3 = Comptacrypto::Sdk::Okx::ClientV3.new(
   api_key: ENV.fetch("OKX_API_KEY", "42"),
   secret_key: ENV.fetch("OKX_SECRET_KEY", "secret"),
   passphrase: ENV.fetch("OKX_PASSPHRASE", "secret")
 )
 
 # Send a request to query server time
-client.time # => #<Faraday::Response:0x00007f74e3a758f0>
-client.time.body # => {"iso"=>"2022-02-07T21:40:25.791Z", "epoch"=>"1644270025.791"}
+client_v3.time # => #<Faraday::Response:0x00007f74e3a758f0>
+client_v3.time.body # => {"iso"=>"2022-02-07T21:40:25.791Z", "epoch"=>"1644270025.791"}
 
 # Send a request to query withdrawal history
-client.withdrawal_history.body
+client_v3.withdrawal_history.body
 # =>  [
 #       {
 #         "amount" => 0.094,
