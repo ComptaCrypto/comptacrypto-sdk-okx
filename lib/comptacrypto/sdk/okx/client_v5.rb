@@ -35,8 +35,41 @@ module Comptacrypto
           public_endpoint(request_path: "/api/v5/public/time")
         end
 
+        # @see https://www.okx.com/docs-v5/en/#rest-api-public-data-get-instruments
+        #
+        # GET /api/v5/public/instruments
+        #
+        # @param instType [String]
+        # @option [String] :uly
+        # @option [String] :instId
+        def trading_pairs(instType:, uly: nil, instId: nil)
+          request_path = URI("/api/v5/public/instruments")
+          params = { instType:, uly:, instId: }.compact
+          request_path.query = URI.encode_www_form(params)
+
+          public_endpoint(request_path: request_path.to_s)
+        end
+
         # Private Endpoints
 
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-deposit-history
+        #
+        # GET /api/v5/asset/deposit-history
+        #
+        # @option [String] ccy
+        # @option [String] txId
+        # @option [String] state 0: waiting for confirmation, 1: deposit credited, 2: deposit successful
+        # @option [String] after Pagination of data to return records earlier than the requested ts, Unix timestamp format in milliseconds
+        # @option [String] before Pagination of data to return records newer than the requested ts, Unix timestamp format in milliseconds
+        # @option [String] limit The maximum is 100; The default is 100
+        def deposit_history(ms_iso8601 = remote_ms_iso8601, ccy: nil, txId: nil, state: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/v5/asset/deposit-history")
+          params = { ccy:, txId:, state:, after:, before:, limit: }.compact
+          request_path.query = URI.encode_www_form(params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+        
         # Get withdrawal history
         #
         # @note Retrieve the withdrawal records according to the currency, withdrawal
