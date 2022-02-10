@@ -44,13 +44,267 @@ module Comptacrypto
         # @option [String] :instId
         def trading_pairs(instType:, uly: nil, instId: nil)
           request_path = URI("/api/v5/public/instruments")
-          params = { instType:, uly:, instId: }.compact
-          request_path.query = URI.encode_www_form(params)
+          query_params = { instType:, uly:, instId: }.compact
+          request_path.query = URI.encode_www_form(query_params)
 
           public_endpoint(request_path: request_path.to_s)
         end
 
         # Private Endpoints
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trade-get-order-details
+        #
+        # GET /api/v5/trade/order
+        #
+        # @param instId [String]
+        # Either ordId or clOrdId is required, if both are passed, ordId will be the main one
+        # @option [String] ordId
+        # @option [String] clOrdId
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trade-get-order-list
+        #
+        # GET /api/v5/trade/orders-pending
+        #
+        # @option [String] instType SPOT, MARGIN, SWAP, FUTURES, OPTION
+        # @option [String] uly
+        # @option [String] instId
+        # @option [String] ordType : market: Market order, limit: Limit order, post_only: Post-only order,
+        # fok: Fill-or-kill order, ioc: Immediate-or-cancel order, Optimal_limit_ioc :Market order with immediate-or-cancel order
+        # @option [String] state : live, partially_filled
+        # @option [String] after
+        # @option [String] before
+        # @option [String] limit
+        def trade_get_order_list(ms_iso8601 = remote_ms_iso8601, instType: nil, uly: nil, instId: nil, ordType: nil, state: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/v5/trade/orders-pending")
+          query_params = { instType:, uly:, instId:, ordType:, state:, after:, before:, limit: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trade-get-order-history-last-7-days
+        #
+        # @note last 7 days
+        #
+        # GET /api/v5/trade/orders-history
+        #
+        # @param :instType [String] SPOT, MARGIN, SWAP, FUTURES, OPTION
+        # @option [String] uly
+        # @option [String] instId
+        # @option [String] ordType : market: Market order, limit: Limit order, post_only: Post-only order,
+        # fok: Fill-or-kill order, ioc: Immediate-or-cancel order, Optimal_limit_ioc :Market order with immediate-or-cancel order
+        # @option [String] state : canceled, filled
+        # @option [String] category : twap, adl, full_liquidation, partial_liquidation, delivery, ddh
+        # @option [String] after Pagination of data to return records earlier than the requested ordId
+        # @option [String] before Pagination of data to return records newer than the requested ordId
+        # @option [String] limit Number of results per request. The maximum is 100; The default is 100
+        def trade_get_order_history_last_7_days(ms_iso8601 = remote_ms_iso8601, instType:, uly: nil, instId: nil, ordType: nil, state: nil, category: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/v5/trade/orders-history")
+          query_params = { instType:, uly:, instId:, ordType:, state:, category:, after:, before:, limit: }.compact
+          request_path.query = URI.encode_www_form(query_params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trade-get-order-history-last-3-months
+        #
+        # @note last 3 months
+        #
+        # GET /api/v5/trade/orders-history-archive
+        #
+        # @param :instType [String] SPOT, MARGIN, SWAP, FUTURES, OPTION
+        # @option [String] uly
+        # @option [String] instId
+        # @option [String] ordType : market: Market order, limit: Limit order, post_only: Post-only order, fok: Fill-or-kill order, ioc: Immediate-or-cancel order, Optimal_limit_ioc :Market order with immediate-or-cancel order
+        # @option [String] state : canceled, filled
+        # @option [String] category : twap, adl, full_liquidation, partial_liquidation, delivery, ddh
+        # @option [String] after : Pagination of data to return records earlier than the requested ordId
+        # @option [String] before : Pagination of data to return records newer than the requested ordId
+        # @option [String] limit : Number of results per request. The maximum is 100; The default is 100
+        def trade_get_order_history_last_3_months(ms_iso8601 = remote_ms_iso8601, instType:, uly: nil, instId: nil, ordType: nil, state: nil, category: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/v5/trade/orders-history-archive")
+          query_params = { instType:, uly:, instId:, ordType:, state:, category:, after:, before:, limit: }.compact
+          request_path.query = URI.encode_www_form(query_params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trade-get-transaction-details-last-3-days
+        #
+        # @note last 3 days
+        #
+        # GET /api/v5/trade/fills
+        #
+        # @option [String] instType : SPOT, MARGIN, SWAP, FUTURES, OPTION
+        # @option [String] uly
+        # @option [String] instId
+        # @option [String] ordId
+        # @option [String] after : Pagination of data to return records earlier than the requested billId
+        # @option [String] before : Pagination of data to return records newer than the requested billId
+        # @option [String] limit : Number of results per request. The maximum is 100; The default is 100
+        def trade_get_transaction_details_last_3_days(ms_iso8601 = remote_ms_iso8601, instType: nil, uly: nil, instId: nil, ordId: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/v5/trade/fills")
+          query_params = { instType:, uly:, instId:, ordId:, after:, before:, limit: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trade-get-transaction-details-last-3-months
+        #
+        # @note last 3 months
+        #
+        # GET /api/v5/trade/fills-history
+        #
+        # @param :instType [String] SPOT, MARGIN, SWAP, FUTURES, OPTION
+        # @option [String] uly
+        # @option [String] instId
+        # @option [String] ordId
+        # @option [String] after : Pagination of data to return records earlier than the requested billId
+        # @option [String] before : Pagination of data to return records newer than the requested billId
+        # @option [String] limit : Number of results per request. The maximum is 100; The default is 100
+        def trade_get_transaction_details_last_3_months(ms_iso8601 = remote_ms_iso8601, instType:, uly: nil, instId: nil, ordId: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/v5/trade/fills-history")
+          query_params = { instType:, uly:, instId:, ordId:, after:, before:, limit: }.compact
+          request_path.query = URI.encode_www_form(query_params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trade-get-algo-order-list
+        #
+        # GET /api/v5/trade/orders-algo-pending
+        #
+        # @param :ordType [String] conditional: One-way stop order, oco: One-cancels-the-other order, trigger: Trigger order, move_order_stop: Trailing order, iceberg: Iceberg order, twap: TWAP order
+        # @option [String] algoId
+        # @option [String] instType
+        # @option [String] instId
+        # @option [String] after : Pagination of data to return records earlier than the requested algoId
+        # @option [String] before : Pagination of data to return records newer than the requested algoId
+        # @option [String] limit : Number of results per request. The maximum is 100; The default is 100
+        def trade_get_algo_order_list(ms_iso8601 = remote_ms_iso8601, ordType:, algoId: nil, instType: nil, instId: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/v5/trade/orders-algo-pending")
+          query_params = { ordType:, algoId:, instType:, instId:, after:, before:, limit: }.compact
+          request_path.query = URI.encode_www_form(query_params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trade-get-algo-order-history
+        #
+        # DO NOT WORK response_body={"msg"=>"Invalid Sign", "code"=>"50113"}
+        # GET /api/v5/trade/orders-algo-history
+        #
+        # @param :ordType [String] conditional: One-way stop order, oco: One-cancels-the-other order, trigger: Trigger order, move_order_stop: Trailing order, iceberg: Iceberg order, twap: TWAP order
+        # Either state or algoId is requied
+        # @option [String] state effective, canceled, order_failed
+        # @option [String] algoId
+        # @option [String] instType SPOT, MARGIN, SWAP, FUTURES, OPTION
+        # @option [String] instId
+        # @option [String] after : Pagination of data to return records earlier than the requested algoId
+        # @option [String] before : Pagination of data to return records newer than the requested algoId
+        # @option [String] limit : Number of results per request. The maximum is 100; The default is 100
+        # def trade_get_algo_order_history(ms_iso8601 = remote_ms_iso8601, ordType:, state: nil, algoId: nil, instType: nil, instId: nil, after: nil, before: nil, limit: "100")
+        #   raise ::ArgumentError if state.nil? && algoId.nil?
+
+        #   request_path = URI("/api/v5/trade/orders-algo-history")
+        #   query_params = { ordType:, state:, algoId:, instType:, instId:, after:, before:, limit: }.compact
+        #   request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+        #   private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        # end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-currencies
+        #
+        # GET /api/v5/asset/currencies
+        #
+        def funding_get_currencies(ms_iso8601 = remote_ms_iso8601)
+          public_endpoint(request_path: URI("/api/v5/asset/currencies"), ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-balance
+        #
+        # GET /api/v5/asset/balances
+        #
+        # @option [String] ccy
+        def funding_get_balance(ms_iso8601 = remote_ms_iso8601, ccy: nil)
+          request_path = URI("/api/v5/asset/balances")
+          query_params = { ccy: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-account-asset-valuation
+        #
+        # GET /api/v5/asset/asset-valuation
+        #
+        # @option [String] ccy
+        def funding_get_account_asset_valuation(ms_iso8601 = remote_ms_iso8601, ccy: nil)
+          request_path = URI("/api/v5/asset/asset-valuation")
+          query_params = { ccy: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-funds-transfer-state
+        #
+        # GET /api/v5/asset/transfer-state
+        #
+        # @option [String] type 0: transfer within account, 1: master account to sub-account, 2: sub-account to master account. The default is 0
+        def funding_get_funds_transfer_state(ms_iso8601 = remote_ms_iso8601, type: nil)
+          request_path = URI("/api/v5/asset/transfer-state")
+          query_params = { type: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-asset-bills-details
+        #
+        # GET /api/v5/asset/bills
+        #
+        # @option [String] ccy
+        # @option [String] type
+        # @option [String] after : Pagination of data to return records earlier than the requested ts, Unix timestamp format in milliseconds
+        # @option [String] before : No 	Pagination of data to return records newer than the requested ts, Unix timestamp format in milliseconds
+        # @option [String] limit : Number of results per request. The maximum is 100; The default is 100
+        def funding_asset_bills_details(ms_iso8601 = remote_ms_iso8601, ccy: nil, type: nil, after: nil, before: nil, limit: "100")
+          request_path = URI("/api/v5/asset/bills")
+          query_params = { ccy:, type:, after:, before:, limit: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-lightning-deposits
+        #
+        # GET /api/v5/asset/deposit-lightning
+        #
+        # @param ccy [String]
+        # @param amt [String]
+        # @option [String] to : 6:funding account, 1:spot account. If empty, will default to funding account.
+        def funding_lightning_deposits(ms_iso8601 = remote_ms_iso8601, ccy:, amt:, to: nil)
+          request_path = URI("/api/v5/asset/deposit-lightning")
+          query_params = { ccy:, amt:, to: }.compact
+          request_path.query = URI.encode_www_form(query_params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-deposit-address
+        #
+        # GET /api/v5/asset/deposit-address
+        #
+        # @param ccy [String]
+        def funding_get_deposit_address(ms_iso8601 = remote_ms_iso8601, ccy:)
+          request_path = URI("/api/v5/asset/deposit-address")
+          query_params = { ccy: }.compact
+          request_path.query = URI.encode_www_form(query_params)
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
 
         # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-deposit-history
         #
@@ -62,14 +316,14 @@ module Comptacrypto
         # @option [String] after Pagination of data to return records earlier than the requested ts, Unix timestamp format in milliseconds
         # @option [String] before Pagination of data to return records newer than the requested ts, Unix timestamp format in milliseconds
         # @option [String] limit The maximum is 100; The default is 100
-        def deposit_history(ms_iso8601 = remote_ms_iso8601, ccy: nil, txId: nil, state: nil, after: nil, before: nil, limit: "100")
+        def funding_get_deposit_history(ms_iso8601 = remote_ms_iso8601, ccy: nil, txId: nil, state: nil, after: nil, before: nil, limit: "100")
           request_path = URI("/api/v5/asset/deposit-history")
-          params = { ccy:, txId:, state:, after:, before:, limit: }.compact
-          request_path.query = URI.encode_www_form(params)
+          query_params = { ccy:, txId:, state:, after:, before:, limit: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
         end
-        
+
         # Get withdrawal history
         #
         # @note Retrieve the withdrawal records according to the currency, withdrawal
@@ -86,13 +340,38 @@ module Comptacrypto
         # @param limit  [String] Number of results per request. The maximum is `100`; the default is `100`
         #
         # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-withdrawal-history
-        def withdrawal_history(ms_iso8601 = remote_ms_iso8601, ccy: nil, tx_id: nil, state: nil, after: nil, before: nil, limit: nil)
+        def funding_get_withdrawal_history(ms_iso8601 = remote_ms_iso8601, ccy: nil, tx_id: nil, state: nil, after: nil, before: nil, limit: nil)
           request_path = URI("/api/v5/asset/withdrawal-history")
           query_params = { ccy:, tx_id:, state:, after:, before:, limit: }.compact
-          request_path.query = ::URI.encode_www_form(query_params) if query_params.any?
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
 
           private_endpoint(request_path:, ms_iso8601:)
         end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-saving-balance
+        #
+        # GET /api/v5/asset/saving-balance
+        #
+        # @option [String] ccy
+        def funding_get_saving_balance(ms_iso8601 = remote_ms_iso8601, ccy: nil)
+          request_path = URI("/api/v5/asset/saving-balance")
+          query_params = { ccy: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-lending-history
+        #
+        # GET /api/v5/asset/lending-history
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-public-borrow-info-public
+        #
+        # GET /api/v5/asset/lending-rate-summary
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-public-borrow-history-public
+        #
+        # GET /api/v5/asset/lending-rate-history
 
         private
 
