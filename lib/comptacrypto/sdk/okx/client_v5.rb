@@ -192,9 +192,9 @@ module Comptacrypto
         # @option [String] after : Pagination of data to return records earlier than the requested algoId
         # @option [String] before : Pagination of data to return records newer than the requested algoId
         # @option [String] limit : Number of results per request. The maximum is 100; The default is 100
-        def trade_get_algo_order_list(ms_iso8601 = remote_ms_iso8601, ordType:, algoId: nil, instType: nil, instId: nil, after: nil, before: nil, limit: "100")
+        def trade_get_algo_order_list(ms_iso8601 = remote_ms_iso8601, ordType:, after: nil, before: nil, algoId: nil, instType: nil, instId: nil, limit: 100)
           request_path = URI("/api/v5/trade/orders-algo-pending")
-          query_params = { ordType:, algoId:, instType:, instId:, after:, before:, limit: }.compact
+          query_params = { after:, before:, limit:, ordType:, algoId:, instType:, instId: }.compact
           request_path.query = URI.encode_www_form(query_params)
 
           private_endpoint(request_path: request_path.to_s, ms_iso8601:)
@@ -202,7 +202,6 @@ module Comptacrypto
 
         # @see https://www.okx.com/docs-v5/en/#rest-api-trade-get-algo-order-history
         #
-        # DO NOT WORK response_body={"msg"=>"Invalid Sign", "code"=>"50113"}
         # GET /api/v5/trade/orders-algo-history
         #
         # @param ordType [String] conditional: One-way stop order, oco: One-cancels-the-other order, trigger: Trigger order, move_order_stop: Trailing order, iceberg: Iceberg order, twap: TWAP order
@@ -214,22 +213,21 @@ module Comptacrypto
         # @option [String] after : Pagination of data to return records earlier than the requested algoId
         # @option [String] before : Pagination of data to return records newer than the requested algoId
         # @option [String] limit : Number of results per request. The maximum is 100; The default is 100
-        # def trade_get_algo_order_history(ms_iso8601 = remote_ms_iso8601, ordType:, state: nil, algoId: nil, instType: nil, instId: nil, after: nil, before: nil, limit: "100")
-        #   raise ::ArgumentError if state.nil? && algoId.nil?
+        def trade_get_algo_order_history(ms_iso8601 = remote_ms_iso8601, after: nil, before: nil, limit: 100, ordType:, state: nil, algoId: nil, instType: nil, instId: nil)
 
-        #   request_path = URI("/api/v5/trade/orders-algo-history")
-        #   query_params = { ordType:, state:, algoId:, instType:, instId:, after:, before:, limit: }.compact
-        #   request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+          request_path = URI("/api/v5/trade/orders-algo-history")
+          query_params = { after:, before:, limit:, ordType:, state:, algoId:, instType:, instId: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
 
-        #   private_endpoint(request_path: request_path.to_s, ms_iso8601:)
-        # end
+          private_endpoint(request_path: request_path, ms_iso8601:)
+        end
 
         # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-currencies
         #
         # GET /api/v5/asset/currencies
         #
         def funding_get_currencies(ms_iso8601 = remote_ms_iso8601)
-          public_endpoint(request_path: URI("/api/v5/asset/currencies"), ms_iso8601:)
+          private_endpoint(request_path: "/api/v5/asset/currencies", ms_iso8601:)
         end
 
         # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-balance
@@ -290,18 +288,19 @@ module Comptacrypto
 
         # @see https://www.okx.com/docs-v5/en/#rest-api-funding-lightning-deposits
         #
+        #  This API function service is only open to some users.
         # GET /api/v5/asset/deposit-lightning
         #
         # @param ccy [String]
-        # @param amt [String]
+        # @param amt [String] Deposit amount between 0.000001 - 0.1
         # @option [String] to : 6:funding account, 1:spot account. If empty, will default to funding account.
-        def funding_lightning_deposits(ms_iso8601 = remote_ms_iso8601, ccy:, amt:, to: nil)
-          request_path = URI("/api/v5/asset/deposit-lightning")
-          query_params = { ccy:, amt:, to: }.compact
-          request_path.query = URI.encode_www_form(query_params)
+        # def funding_lightning_deposits(ms_iso8601 = remote_ms_iso8601, ccy:, amt:, to: nil)
+        #   request_path = URI("/api/v5/asset/deposit-lightning")
+        #   query_params = { amt:, to:, ccy:}.compact
+        #   request_path.query = URI.encode_www_form(query_params)
 
-          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
-        end
+        #   private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        # end
 
         # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-deposit-address
         #
