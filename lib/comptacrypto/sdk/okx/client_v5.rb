@@ -60,6 +60,15 @@ module Comptacrypto
         # Either ordId or clOrdId is required, if both are passed, ordId will be the main one
         # @option [String] ordId
         # @option [String] clOrdId
+        def trade_get_order_details(ms_iso8601 = remote_ms_iso8601, instId:, ordId: nil, clOrdId: nil)
+          raise ::ArgumentError if ordId.nil? && clOrdId.nil?
+
+          request_path = URI("/api/v5/trade/order")
+          query_params = { instId:, ordId:, clOrdId: }.compact
+          request_path.query = ::URI.encode_www_form(**query_params) if query_params.any?
+
+          private_endpoint(request_path: request_path.to_s, ms_iso8601:)
+        end
 
         # @see https://www.okx.com/docs-v5/en/#rest-api-trade-get-order-list
         #
