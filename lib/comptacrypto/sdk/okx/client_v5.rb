@@ -628,6 +628,50 @@ module Comptacrypto
         #
         # GET /api/v5/market/index-components
 
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trading-data-get-support-coin
+        #
+        # GET /api/v5/rubik/stat/trading-data/support-coin
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trading-data-get-taker-volume
+        #
+        # GET /api/v5/rubik/stat/taker-volume
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trading-data-get-margin-lending-ratio
+        #
+        # GET /api/v5/rubik/stat/margin/loan-ratio
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trading-data-get-long-short-ratio
+        #
+        # GET /api/v5/rubik/stat/contracts/long-short-account-ratio
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trading-data-get-contracts-open-interest-and-volume
+        #
+        # GET /api/v5/rubik/stat/contracts/open-interest-volume
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trading-data-get-options-open-interest-and-volume
+        #
+        # GET /api/v5/rubik/stat/option/open-interest-volume
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trading-data-get-put-call-ratio
+        #
+        # GET /api/v5/rubik/stat/option/open-interest-volume-ratio
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trading-data-get-open-interest-and-volume-expiry
+        #
+        # GET /api/v5/rubik/stat/option/open-interest-volume-expiry
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trading-data-get-open-interest-and-volume-strike
+        #
+        # GET /api/v5/rubik/stat/option/open-interest-volume-strike
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-trading-data-get-taker-flow
+        #
+        # GET /api/v5/rubik/stat/option/taker-block-volume
+
+        # @see https://www.okx.com/docs-v5/en/#rest-api-status
+        #
+        # GET /api/v5/system/status
+
         private
 
         def public_endpoint(request_path:)
