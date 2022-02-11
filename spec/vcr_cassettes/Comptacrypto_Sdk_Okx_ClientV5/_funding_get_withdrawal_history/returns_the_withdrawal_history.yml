@@ -19,7 +19,7 @@ http_interactions:
       message: ''
     headers:
       Date:
-      - Thu, 10 Feb 2022 14:06:00 GMT
+      - Thu, 10 Feb 2022 16:52:50 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -27,8 +27,8 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - locale=en-US; Max-Age=604800; Expires=Thu, 17-Feb-2022 14:06:00 GMT; Path=/
-      - locale=en-US; Max-Age=604800; Expires=Thu, 17-Feb-2022 14:06:00 GMT; Path=/
+      - locale=en-US; Max-Age=604800; Expires=Thu, 17-Feb-2022 16:52:50 GMT; Path=/
+      - locale=en-US; Max-Age=604800; Expires=Thu, 17-Feb-2022 16:52:50 GMT; Path=/
       X-Brokerid:
       - '0'
       Strict-Transport-Security:
@@ -40,10 +40,10 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 6db5e5433ad2edf7-CDG
+      - 6db6d9a61d3771f3-LHR
     body:
       encoding: ASCII-8BIT
-      string: '{"code":"0","data":[{"ts":"1644501960430"}],"msg":""}'
+      string: '{"code":"0","data":[{"ts":"1644511970407"}],"msg":""}'
   recorded_at: Thu, 10 Feb 2022 13:59:25 GMT
 - request:
     method: get
@@ -57,9 +57,9 @@ http_interactions:
       Ok-Access-Key:
       - "<OKX_API_KEY>"
       Ok-Access-Sign:
-      - d1bkIk0CcPtO/XNN31j6TbXcHNuFm+rYmWjE1fPSoJQ=
+      - HOzKNlrGIb+Z8WmiyP8X9YdO5V450ShK17ao56X6zFo=
       Ok-Access-Timestamp:
-      - '2022-02-10T14:06:00.430Z'
+      - '2022-02-10T16:52:50.407Z'
       Ok-Access-Passphrase:
       - "<OKX_PASSPHRASE>"
       Accept-Encoding:
@@ -72,7 +72,7 @@ http_interactions:
       message: ''
     headers:
       Date:
-      - Thu, 10 Feb 2022 14:06:00 GMT
+      - Thu, 10 Feb 2022 16:52:50 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -80,8 +80,8 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - locale=en_US; Max-Age=604800; Expires=Thu, 17-Feb-2022 14:06:00 GMT; Path=/
-      - locale=en_US; Max-Age=604800; Expires=Thu, 17-Feb-2022 14:06:00 GMT; Path=/
+      - locale=en_US; Max-Age=604800; Expires=Thu, 17-Feb-2022 16:52:50 GMT; Path=/
+      - locale=en_US; Max-Age=604800; Expires=Thu, 17-Feb-2022 16:52:50 GMT; Path=/
       X-Content-Type-Options:
       - nosniff
       X-Xss-Protection:
@@ -105,7 +105,7 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 6db5e545a8a5cd97-CDG
+      - 6db6d9a84dcd8e26-LHR
     body:
       encoding: UTF-8
       string: '{"code":"0","data":[],"msg":""}'
