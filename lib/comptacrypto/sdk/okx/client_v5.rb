@@ -1668,7 +1668,10 @@ module Comptacrypto
         def uri_query(**params)
           return if params.empty?
 
-          ::URI.encode_www_form(**params.transform_keys { |key| snake_case_to_lower_camel_case(key).to_sym })
+          params = params.transform_keys { |key| snake_case_to_lower_camel_case(key).to_sym }
+          params = params.sort.to_h
+
+          ::URI.encode_www_form(**params)
         end
       end
     end
