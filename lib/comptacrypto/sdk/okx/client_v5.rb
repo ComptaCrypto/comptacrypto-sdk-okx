@@ -502,8 +502,8 @@ module Comptacrypto
         #
         # @param ccy    [String] Currency
         # @param type   [String] Bill type
-        # @param after  [Integer] Pagination of data to return records earlier than the requested ts
-        # @param before [Integer] Pagination of data to return records newer than the requested ts
+        # @param after  [Integer, nil] Pagination of data to return records earlier than the requested ts
+        # @param before [Integer, nil] Pagination of data to return records newer than the requested ts
         # @param limit  [Integer, nil] Number of results per request. The maximum is `100`; the default is `100`
         #
         # @see https://www.okx.com/docs-v5/en/#rest-api-funding-asset-bills-details
@@ -661,8 +661,8 @@ module Comptacrypto
         # @param ccy    [String] Currency, e.g. "BTC"
         # @param tx_id  [String] Hash record of the deposit
         # @param state  [String] Status of deposit
-        # @param after  [String] Pagination of data to return records earlier than the requested ts
-        # @param before [String] Pagination of data to return records newer than the requested ts
+        # @param after  [Integer, nil] Pagination of data to return records earlier than the requested ts
+        # @param before [Integer, nil] Pagination of data to return records newer than the requested ts
         # @param limit  [Integer, nil] The maximum is 100; The default is 100
         #
         # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-deposit-history
@@ -691,8 +691,8 @@ module Comptacrypto
         # @param ccy    [String] Currency, e.g. "`BTC`"
         # @param tx_id  [String] Hash record of the deposit
         # @param state  [Integer, nil] Status of withdrawal (from "`-3`" to "`5`")
-        # @param after  [Integer, nil] Pagination of data to return records earlier than the requested ts, e.g. "`1597026383085`"
-        # @param before [Integer, nil] Pagination of data to return records newer than the requested ts, e.g. "`1597026383085`"
+        # @param after  [Integer, nil] Pagination of data to return records earlier than the requested ts, e.g. `1597026383085`
+        # @param before [Integer, nil] Pagination of data to return records newer than the requested ts, e.g. `1597026383085`
         # @param limit  [Integer, nil] Number of results per request. The maximum is `100`; the default is `100`
         #
         # @see https://www.okx.com/docs-v5/en/#rest-api-funding-get-withdrawal-history
@@ -1239,8 +1239,8 @@ module Comptacrypto
         #
         # @param enable   [String, nil] Sub-account status
         # @param sub_acct [String, nil] Sub-account name
-        # @param after    [Integer, nil] If you query the data prior to the requested creation time ID, the value will be a Unix timestamp in millisecond format.
-        # @param before   [Integer, nil] If you query the data after the requested creation time ID, the value will be a Unix timestamp in millisecond format.
+        # @param after    [Integer, nil] If you query the data prior to the requested creation time ID
+        # @param before   [Integer, nil] If you query the data after the requested creation time ID
         # @param limit    [Integer, nil] The maximum is 100; The default is 100
         #
         # @see https://www.okx.com/docs-v5/en/#rest-api-subaccount-view-sub-account-list
