@@ -601,7 +601,7 @@ module Comptacrypto
               131, # Transferred to unified account
               150, # Affiliate commission
               151  # Referral reward
-            ]
+            ].freeze
 
             raise ::ArgumentError unless types.include?(type)
           end
@@ -629,7 +629,7 @@ module Comptacrypto
             accounts = [
               6, # funding account (default)
               1  # spot account
-            ]
+            ].freeze
 
             raise ::ArgumentError unless accounts.include?(to)
           end
