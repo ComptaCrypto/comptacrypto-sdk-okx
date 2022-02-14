@@ -8,8 +8,8 @@ RSpec.describe Comptacrypto::Sdk::Okx::ClientV3 do
   describe "#time", :vcr do
     let(:payload) do
       {
-        "iso" => "2022-02-10T13:59:26.459Z",
-        "epoch" => "1644501566.459"
+        "iso" => "2022-02-12T17:45:46.804Z",
+        "epoch" => "1644687946.804"
       }
     end
 
