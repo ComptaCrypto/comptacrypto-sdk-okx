@@ -34,7 +34,6 @@ module Comptacrypto
         #     # => "i19IcCmVwVmMVz2x4hhmqbgl1KeU0WnXBgoDYFeWNgs="
         def call(request_path:, ms_iso8601:)
           message = "#{ms_iso8601}GET#{request_path}"
-          puts "message is: #{message.inspect}"
           hash = ::OpenSSL::HMAC.digest("SHA256", secret_key, message)
           ::Base64.strict_encode64(hash)
         end
