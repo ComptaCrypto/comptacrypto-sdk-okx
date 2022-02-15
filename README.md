@@ -74,8 +74,8 @@ client_v5 = Comptacrypto::Sdk::Okx::ClientV5.new(
 )
 
 # Send a request to query server time
-client_v5.time # => #<Faraday::Response:0x00007f74e3a758f0>
-client_v5.time.body # => {"code"=>"0", "data"=>[{"ts"=>"1644499170774"}], "msg"=>""}
+client_v5.public_data_get_system_time # => #<Faraday::Response:0x00007f74e3a758f0>
+client_v5.public_data_get_system_time.body # => {"code"=>"0", "data"=>[{"ts"=>"1644499170774"}], "msg"=>""}
 ```
 
 ## Test
