@@ -88,7 +88,7 @@ module Comptacrypto
         # @param limit      [Integer, nil] Number of results per request. The maximum is `100`; the default is `100`
         #
         # @see https://www.okx.com/docs-v5/en/#rest-api-public-data-get-delivery-exercise-history
-        def get_delivery_exercise_history(inst_type:, uly:, after: nil, before: nil, limit: nil)
+        def public_data_get_delivery_exercise_history(inst_type:, uly:, after: nil, before: nil, limit: nil)
           instrument_types = %w[
             FUTURES
             OPTION
@@ -113,7 +113,7 @@ module Comptacrypto
         # @param limit    [Integer, nil] Number of results per request. The maximum is `100`; the default is `100`
         #
         # @see https://www.okx.com/docs-v5/en/#rest-api-public-data-get-funding-rate-history
-        def get_funding_rate_history(inst_id:, after: nil, before: nil, limit: nil)
+        def public_data_get_funding_rate_history(inst_id:, after: nil, before: nil, limit: nil)
           raise ::ArgumentError unless inst_id.include?("SWAP")
 
           get!("/api/v5/public/funding-rate-history", inst_id:, after:, before:, limit:)
