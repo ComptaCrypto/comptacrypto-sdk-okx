@@ -74,6 +74,51 @@ module Comptacrypto
           get!("/api/v5/public/instruments", inst_type:, uly:, inst_id:)
         end
 
+        # Get delivery/exercise history
+        #
+        # @note Retrieve the estimated delivery price of the last 3 months,
+        #       which will only have a return value one hour before the delivery/exercise.
+        #
+        #   GET /api/v5/public/delivery-exercise-history
+        #
+        # @param inst_type  [String] Instrument type. FUTURES, OPTION
+        # @param uly        [String] Underlying
+        # @param after      [Integer] Pagination of data to return records earlier than the requested ts
+        # @param before     [Integer] Pagination of data to return records newer than the requested ts
+        # @param limit      [Integer, nil] Number of results per request. The maximum is `100`; the default is `100`
+        #
+        # @see https://www.okx.com/docs-v5/en/#rest-api-public-data-get-delivery-exercise-history
+        def public_data_get_delivery_exercise_history(inst_type:, uly:, after: nil, before: nil, limit: nil)
+          instrument_types = %w[
+            FUTURES
+            OPTION
+          ].freeze
+
+          raise ::ArgumentError unless instrument_types.include?(inst_type)
+
+          raise ::ArgumentError if uly.nil?
+
+          get!("/api/v5/public/delivery-exercise-history", inst_type:, uly:, after:, before:, limit:)
+        end
+
+        # Get funding rate history
+        #
+        # @note Retrieve funding rate history. This endpoint can retrieve data from the last 3 months.
+        #
+        #   GET /api/v5/public/funding-rate-history
+        #
+        # @param inst_id   [String] Instrument ID, e.g. BTC-USD-SWAP. Only applicable to SWAP
+        # @param after    [Integer] Pagination of data to return records newer than the requested `fundingTime`
+        # @param before   [Integer] Pagination of data to return records earlier than the requested `fundingTime``
+        # @param limit    [Integer, nil] Number of results per request. The maximum is `100`; the default is `100`
+        #
+        # @see https://www.okx.com/docs-v5/en/#rest-api-public-data-get-funding-rate-history
+        def public_data_get_funding_rate_history(inst_id:, after: nil, before: nil, limit: nil)
+          raise ::ArgumentError unless inst_id.include?("SWAP")
+
+          get!("/api/v5/public/funding-rate-history", inst_id:, after:, before:, limit:)
+        end
+
         # Private Endpoints
 
         # Get order details
