@@ -119,6 +119,27 @@ module Comptacrypto
           get!("/api/v5/public/funding-rate-history", inst_id:, after:, before:, limit:)
         end
 
+        # Get underlying
+        #
+        # @note List of underlying for Instrument types : SWAP, FUTURES, OPTION
+        #
+        #   GET /api/v5/public/underlying
+        #
+        # @param inst_type [String]
+        #
+        # @see https://www.okx.com/docs-v5/en/#rest-api-public-data-get-underlying
+        def public_data_get_underlying(inst_type:)
+          instrument_types = %w[
+            SWAP
+            FUTURES
+            OPTION
+          ].freeze
+
+          raise ::ArgumentError unless instrument_types.include?(inst_type)
+
+          get!("/api/v5/public/underlying", inst_type:)
+        end
+
         # Private Endpoints
 
         # Get order details
