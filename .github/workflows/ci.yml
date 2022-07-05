@@ -11,7 +11,7 @@ on:
       - "Gemfile"
   pull_request:
     branches:
-      - main
+      - master
   create:
 
 jobs:
